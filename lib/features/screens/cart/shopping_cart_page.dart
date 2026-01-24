@@ -74,10 +74,7 @@ class _CartCheckoutPageState extends State<CartCheckoutPage> {
       ),
       child: Row(
         children: [
-          IconButton(
-            icon: const Icon(Icons.arrow_back_ios),
-            onPressed: () => Navigator.pop(context),
-          ),
+          BackButton(),
           const Expanded(
             child: Text(
               "My Cart",

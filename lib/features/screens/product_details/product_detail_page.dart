@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fresh_market_app/features/screens/cart/shopping_cart_page.dart';
 
 class ProductDetailsPage extends StatefulWidget {
   const ProductDetailsPage({super.key});
@@ -59,10 +60,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
       ),
       child: Row(
         children: [
-          IconButton(
-            icon: const Icon(Icons.arrow_back_ios_new),
-            onPressed: () => Navigator.pop(context),
-          ),
+          BackButton(),
           const Expanded(
             child: Text(
               "Product Details",
@@ -326,7 +324,12 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
             const SizedBox(width: 16),
             Expanded(
               child: ElevatedButton.icon(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const CartCheckoutPage()));
+                },
                 icon: const Icon(Icons.shopping_basket),
                 label: const Text(
                   "Add to Cart",

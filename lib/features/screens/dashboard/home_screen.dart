@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:fresh_market_app/features/core/app_colors.dart';
+import 'package:fresh_market_app/features/screens/order_history/order_details.dart';
+import 'package:fresh_market_app/features/screens/order_history/order_history_page.dart';
+import 'package:fresh_market_app/features/screens/product_details/product_detail_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class FreshMarketHome extends StatelessWidget {
+class FreshMarketHome extends StatefulWidget {
   const FreshMarketHome({super.key});
 
+  @override
+  State<FreshMarketHome> createState() => _FreshMarketHomeState();
+}
 
+class _FreshMarketHomeState extends State<FreshMarketHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -14,7 +21,7 @@ class FreshMarketHome extends StatelessWidget {
         child: Stack(
           children: [
             _content(),
-            _bottomNav(),
+            //_bottomNav(),
           ],
         ),
       ),
@@ -38,7 +45,6 @@ class FreshMarketHome extends StatelessWidget {
       ),
     );
   }
-
 
   Widget _topBar() {
     return Padding(
@@ -78,7 +84,6 @@ class FreshMarketHome extends StatelessWidget {
       ),
     );
   }
-
 
   Widget _searchBar() {
     return Padding(
@@ -126,7 +131,6 @@ class FreshMarketHome extends StatelessWidget {
       ),
     );
   }
-
 
   Widget _promoBanner() {
     return Padding(
@@ -178,7 +182,6 @@ class FreshMarketHome extends StatelessWidget {
     );
   }
 
-
   Widget _trackBatch() {
     return Padding(
       padding: const EdgeInsets.all(16),
@@ -186,58 +189,73 @@ class FreshMarketHome extends StatelessWidget {
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
+            children: [
               Text("Track My Batch",
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-              Text("View History",
-                  style: TextStyle(color: AppColors.accent, fontWeight: FontWeight.bold))
+              TextButton(onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const OrderHistoryPage()));
+              },
+              child: Text("View History",
+                  style: TextStyle(color: AppColors.accent, fontWeight: FontWeight.bold)),
+                  )
             ],
           ),
           const SizedBox(height: 10),
-          Card(
-            shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Row(
-                children: [
-                  CircleAvatar(
-                    radius: 28,
-                    backgroundColor: AppColors.accent.withValues(alpha: .1),
-                    child:
-                    const Icon(Icons.local_shipping, color: AppColors.accent, size: 28),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment:
-                          MainAxisAlignment.spaceBetween,
-                          children: const [
-                            Text("Batch #402",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold)),
-                            Chip(
-                              label: Text("On the way",
-                                  style: TextStyle(fontSize: 10)),
-                              backgroundColor: Color(0xFFCCF5CC),
-                            )
-                          ],
-                        ),
-                        const Text("Arriving in 12 mins • 4 items",
-                            style: TextStyle(fontSize: 12)),
-                        const SizedBox(height: 6),
-                        LinearProgressIndicator(
-                          value: .75,
-                          backgroundColor: Colors.grey.shade200,
-                          color: AppColors.accent,
-                        )
-                      ],
+          InkWell(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const OrderDetailsPage()));
+            },
+            child: Card(
+              shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Row(
+                  children: [
+                    CircleAvatar(
+                      radius: 28,
+                      backgroundColor: AppColors.accent.withValues(alpha: .1),
+                      child:
+                      const Icon(Icons.local_shipping, color: AppColors.accent, size: 28),
                     ),
-                  )
-                ],
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment:
+                            MainAxisAlignment.spaceBetween,
+                            children: const [
+                              Text("Batch #402",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold)),
+                              Chip(
+                                label: Text("On the way",
+                                    style: TextStyle(fontSize: 10)),
+                                backgroundColor: Color(0xFFCCF5CC),
+                              )
+                            ],
+                          ),
+                          const Text("Arriving in 12 mins • 4 items",
+                              style: TextStyle(fontSize: 12)),
+                          const SizedBox(height: 6),
+                          LinearProgressIndicator(
+                            value: .75,
+                            backgroundColor: Colors.grey.shade200,
+                            color: AppColors.accent,
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
           )
@@ -245,7 +263,6 @@ class FreshMarketHome extends StatelessWidget {
       ),
     );
   }
-
 
   Widget _categories() {
     final items = ["🍎 Fruits", "🥦 Veggies", "🥛 Dairy", "🍯 Pantry"];
@@ -276,7 +293,6 @@ class FreshMarketHome extends StatelessWidget {
       ),
     );
   }
-
 
   Widget _freshArrivals() {
     return Padding(
@@ -315,47 +331,54 @@ class FreshMarketHome extends StatelessWidget {
   }
 
   Widget _productCard(String name, String price, String image) {
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      child: Column(
-        children: [
-          Expanded(
-            child: ClipRRect(
-              borderRadius:
-              const BorderRadius.vertical(top: Radius.circular(16)),
-              child: Image.network(image, fit: BoxFit.cover),
+    return InkWell(
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => const ProductDetailsPage()));
+      },
+      child: Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        child: Column(
+          children: [
+            Expanded(
+              child: ClipRRect(
+                borderRadius:
+                const BorderRadius.vertical(top: Radius.circular(16)),
+                child: Image.network(image, fit: BoxFit.cover),
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(name,
-                    style: const TextStyle(fontWeight: FontWeight.bold)),
-                const SizedBox(height: 4),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(price,
-                        style: const TextStyle(
-                            color: AppColors.accent, fontWeight: FontWeight.bold)),
-                    CircleAvatar(
-                      radius: 14,
-                      backgroundColor: AppColors.accent,
-                      child:
-                      const Icon(Icons.add, color: Colors.white, size: 16),
-                    )
-                  ],
-                )
-              ],
-            ),
-          )
-        ],
+            Padding(
+              padding: const EdgeInsets.all(8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(name,
+                      style: const TextStyle(fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 4),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(price,
+                          style: const TextStyle(
+                              color: AppColors.accent, fontWeight: FontWeight.bold)),
+                      CircleAvatar(
+                        radius: 14,
+                        backgroundColor: AppColors.accent,
+                        child:
+                        const Icon(Icons.add, color: Colors.white, size: 16),
+                      )
+                    ],
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
-
 
   Widget _bottomNav() {
     return Positioned(

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:fresh_market_app/features/auth/view/user_registration_screen.dart';
 import 'package:fresh_market_app/features/core/app_colors.dart';
+import 'package:fresh_market_app/features/screens/dashboard/bottom_navigation_bar.dart';
 import 'package:fresh_market_app/widgets/buttons/social_button.dart';
 import 'package:fresh_market_app/widgets/dividers/labelled_divider.dart';
 import 'package:fresh_market_app/widgets/input_fields/custom_form.dart';
@@ -128,7 +130,7 @@ class _UserLoginScreenState extends State<UserLoginScreen> {
                       ),
                     ),
                     onPressed: () {
-                      // TODO: hook up auth
+                      _navigateToHomePage();
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -202,7 +204,9 @@ class _UserLoginScreenState extends State<UserLoginScreen> {
                           ),
                         ),
                         GestureDetector(
-                          onTap: () {},
+                          onTap: () {
+                            _navigateToRegistration();
+                          },
                           child: Text(
                             'Sign Up',
                             style: GoogleFonts.plusJakartaSans(
@@ -223,5 +227,21 @@ class _UserLoginScreenState extends State<UserLoginScreen> {
         ),
       ),
     );
+  }
+
+  _navigateToRegistration() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => const UserRegistrationScreen()));
+
+  }
+
+  _navigateToHomePage() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => const BottomNavigation()));
+
   }
 }

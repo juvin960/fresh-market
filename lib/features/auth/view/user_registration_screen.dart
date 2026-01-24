@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:fresh_market_app/widgets/buttons/custom_button.dart';
 import 'package:fresh_market_app/widgets/input_fields/build_text_field.dart';
@@ -24,8 +26,10 @@ class _UserRegistrationScreenState extends State<UserRegistrationScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new),
-          onPressed: () {},
+          icon: Icon( Platform.isIOS ? Icons.arrow_back_ios : Icons.arrow_back,),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
         ),
         elevation: 0,
       ),

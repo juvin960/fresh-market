@@ -32,7 +32,7 @@ class _DeliveryAddressesPageState extends State<DeliveryAddressesPage> {
                       onTap: () {},
                       child: const CircleAvatar(
                         backgroundColor: Colors.transparent,
-                        child: Icon(Icons.arrow_back, size: 24),
+                        child: BackButton(),
                       ),
                     ),
                     const Expanded(

@@ -11,10 +11,7 @@ class OrderHistoryPage extends StatelessWidget {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: theme.scaffoldBackgroundColor,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {},
-        ),
+        leading: BackButton(),
         actions: [
           IconButton(
             icon: const Icon(Icons.search),
@@ -69,8 +66,7 @@ class OrderHistoryPage extends StatelessWidget {
             ),
           ),
         ],
-      ),
-      bottomNavigationBar: const _BottomNav(),
+      )
     );
   }
 }

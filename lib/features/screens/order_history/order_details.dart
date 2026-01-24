@@ -33,10 +33,7 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                   children: [
                     GestureDetector(
                       onTap: () {},
-                      child: const CircleAvatar(
-                        backgroundColor: Colors.transparent,
-                        child: Icon(Icons.arrow_back_ios_new, size: 24),
-                      ),
+                      child: const BackButton(),
                     ),
                     const Text(
                       'Order #8829',

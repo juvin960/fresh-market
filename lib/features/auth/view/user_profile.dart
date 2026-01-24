@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:fresh_market_app/features/auth/view/user_login_screen.dart';
+import 'package:fresh_market_app/features/screens/address/delivery_address_page.dart';
+import 'package:fresh_market_app/features/screens/order_history/order_history_page.dart';
 
-class ShopperProfileScreen extends StatelessWidget {
+class ShopperProfileScreen extends StatefulWidget {
   const ShopperProfileScreen({super.key});
 
+  @override
+  State<ShopperProfileScreen> createState() => _ShopperProfileScreenState();
+}
+
+class _ShopperProfileScreenState extends State<ShopperProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -63,7 +71,7 @@ class ShopperProfileScreen extends StatelessWidget {
                   padding:
                   const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
-                    color: theme.colorScheme.primary.withOpacity(0.1),
+                    color: theme.colorScheme.primary.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(color: theme.colorScheme.primary),
                   ),
@@ -149,8 +157,8 @@ class ShopperProfileScreen extends StatelessWidget {
 
             // Account Section
             _buildSectionHeader("My Account"),
-            _buildNavTile(Icons.shopping_bag, "My Orders"),
-            _buildNavTile(Icons.location_on, "Delivery Addresses"),
+            _buildNavTile(Icons.shopping_bag, "My Orders", onTap: () => _navigateToOrders()),
+            _buildNavTile(Icons.location_on, "Delivery Addresses",  onTap: () => _navigateToAddress()),
             _buildNavTile(Icons.credit_card, "Payment Methods"),
 
             const SizedBox(height: 24),
@@ -170,30 +178,17 @@ class ShopperProfileScreen extends StatelessWidget {
                 foregroundColor: Colors.red,
                 minimumSize: const Size.fromHeight(48),
               ),
-              onPressed: () {},
+              onPressed: () {
+                _logOut();
+              },
               child: const Text("Log Out"),
             ),
             const SizedBox(height: 8),
             const Text("Version 2.4.0 (Build 1042)",
                 style: TextStyle(color: Colors.grey, fontSize: 12)),
+            const SizedBox(height: 40),
           ],
         ),
-      ),
-      bottomNavigationBar: NavigationBar(
-        destinations: const [
-          NavigationDestination(icon: Icon(Icons.home), label: "Home"),
-          NavigationDestination(icon: Icon(Icons.search), label: "Browse"),
-          NavigationDestination(
-              icon: Badge(
-                backgroundColor: Colors.red,
-                child: Icon(Icons.shopping_cart),
-              ),
-              label: "Cart"),
-          NavigationDestination(
-              icon: Icon(Icons.person, color: Colors.green), label: "Profile"),
-        ],
-        selectedIndex: 3,
-        onDestinationSelected: (index) {},
       ),
     );
   }
@@ -207,7 +202,7 @@ class ShopperProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildNavTile(IconData icon, String title) {
+  Widget _buildNavTile(IconData icon, String title,{Function? onTap}) {
     return ListTile(
       leading: CircleAvatar(
         backgroundColor: Colors.green.shade50,
@@ -215,7 +210,32 @@ class ShopperProfileScreen extends StatelessWidget {
       ),
       title: Text(title),
       trailing: const Icon(Icons.chevron_right, color: Colors.grey),
-      onTap: () {},
+      onTap: () => onTap!(),
     );
+  }
+
+  _navigateToOrders() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => const OrderHistoryPage()));
+  }
+
+  _navigateToAddress() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => const DeliveryAddressesPage()));
+  }
+  _logOut() {
+    Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+      MaterialPageRoute(
+        builder: (BuildContext context) {
+          return const UserLoginScreen();
+        },
+      ),
+          (_) => false,
+    );
+
   }
 }

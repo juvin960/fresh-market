@@ -15,16 +15,11 @@ class CategoriesPage extends StatelessWidget {
     return Scaffold(
 
       body: SafeArea(
-        child: Stack(
+        child: Column(
           children: [
-            Column(
-              children: [
-                _header(),
-                _filters(),
-                Expanded(child: _categoriesGrid()),
-              ],
-            ),
-            _bottomNav(),
+            _header(),
+            _filters(),
+            Expanded(child: _categoriesGrid()),
           ],
         ),
       ),
