@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:fresh_market_app/features/auth/view/forgot_password.dart';
 import 'package:fresh_market_app/features/auth/view/user_login_screen.dart';
+import 'package:fresh_market_app/features/core/app_colors.dart';
 
 import 'features/auth/view/user_profile.dart';
 import 'features/auth/view/user_registration_screen.dart';
+import 'features/screens/cart/shopping_cart_page.dart';
+import 'features/screens/dashboard/home_screen.dart';
+import 'features/screens/order_tracking/order_tracking_page.dart';
+import 'features/screens/product_category/product_category_page.dart';
+import 'features/screens/product_details/product_detail_page.dart';
+import 'features/screens/product_list/product_listing_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -19,11 +26,11 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF13EC13)),
+        colorScheme: ColorScheme.fromSeed(seedColor: AppColors.accent),
         useMaterial3: true,
         fontFamily: 'PlusJakartaSans',
       ),
-      home: const ShopperProfileScreen(),
+      home: const CategoriesPage(),
     );
   }
 }
