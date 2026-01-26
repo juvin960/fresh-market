@@ -3,9 +3,9 @@ import 'package:fresh_market_app/features/auth/view/user_profile.dart';
 import 'package:fresh_market_app/features/core/app_colors.dart';
 import 'package:fresh_market_app/features/screens/cart/shopping_cart_page.dart';
 import 'package:fresh_market_app/features/screens/dashboard/home_screen.dart';
-import 'package:fresh_market_app/features/screens/order_history/order_history_page.dart';
-import 'package:fresh_market_app/features/screens/product_category/product_category_page.dart';
-import 'package:fresh_market_app/features/screens/product_list/product_listing_screen.dart';
+import 'package:fresh_market_app/features/screens/product/product_category/product_category_page.dart';
+
+import '../product/product_list/product_listing_screen.dart';
 
 class BottomNavigation extends StatefulWidget {
   const BottomNavigation({Key? key}) : super(key: key);

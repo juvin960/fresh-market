@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:fresh_market_app/features/auth/view/user_login_screen.dart';
 import 'package:fresh_market_app/features/screens/address/delivery_address_page.dart';
-import 'package:fresh_market_app/features/screens/order_history/order_history_page.dart';
+
+import '../../screens/order/order_history/order_history_page.dart';
+
 
 class ShopperProfileScreen extends StatefulWidget {
   const ShopperProfileScreen({super.key});

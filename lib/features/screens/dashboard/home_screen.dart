@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:fresh_market_app/features/core/app_colors.dart';
-import 'package:fresh_market_app/features/screens/order_history/order_details.dart';
-import 'package:fresh_market_app/features/screens/order_history/order_history_page.dart';
-import 'package:fresh_market_app/features/screens/product_details/product_detail_page.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import '../order/order_history/order_details.dart';
+import '../order/order_history/order_history_page.dart';
+import '../product/product_details/product_detail_page.dart';
 
 class FreshMarketHome extends StatefulWidget {
   const FreshMarketHome({super.key});

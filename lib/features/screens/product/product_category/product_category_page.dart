@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../widgets/category_card.dart';
-import '../../core/app_colors.dart';
+import '../../../../widgets/category_card.dart';
+import '../../../core/app_colors.dart';
 
 class CategoriesPage extends StatelessWidget {
   const CategoriesPage({super.key});
