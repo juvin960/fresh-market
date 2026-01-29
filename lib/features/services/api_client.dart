@@ -7,10 +7,8 @@ class ApiClient {
   final String baseUrl;
   final http.Client client;
 
-  ApiClient({
-    required this.baseUrl,
-    http.Client? client,
-  }) : client = client ?? http.Client();
+  ApiClient({required this.baseUrl, http.Client? client})
+    : client = client ?? http.Client();
 
   static const _defaultHeaders = {
     'Content-Type': 'application/json',
@@ -23,22 +21,49 @@ class ApiClient {
 
     return {
       ..._defaultHeaders,
-      if (token != null && token.isNotEmpty)
-        'Authorization': 'Bearer $token',
+      if (token != null && token.isNotEmpty) 'Authorization': 'Bearer $token',
     };
   }
 
-  bool _isSuccess(int code) => code >= 200 && code < 300;
+  bool _isSuccess(int code) => code == 200;
 
   dynamic _handleResponse(http.Response response, String endpoint) {
-    debugPrint('[$endpoint] ${response.statusCode}');
-    debugPrint(response.body);
+    // debugPrint('[$endpoint] ${response.statusCode}');
+    // debugPrint(response.body);
+    //
+    // if (_isSuccess(response.statusCode)) {
+    //   return response.body.isNotEmpty
+    //       ? {
+    //         'body': jsonDecode(response.body),
+    //         'statusCode': response.statusCode,
+    //       }
+    //       : null;
+    // } else {
+    //   throw ApiException(
+    //     statusCode: response.statusCode,
+    //     message: response.body,
+    //   );
+    // }
 
-    if (_isSuccess(response.statusCode)) {
-      return response.body.isNotEmpty
-          ? jsonDecode(response.body)
-          : null;
-    } else {
+    try {
+      debugPrint('[$endpoint] ${response.statusCode}');
+      debugPrint(response.body);
+      return {
+        'body': jsonDecode(response.body),
+        'statusCode': response.statusCode,
+      };
+
+      if (_isSuccess(response.statusCode)) {
+        return response.body.isNotEmpty
+            ? {
+          'body': jsonDecode(response.body),
+          'statusCode': response.statusCode,
+        }
+            : null;
+      } else {
+
+      }
+    } catch (e) {
       throw ApiException(
         statusCode: response.statusCode,
         message: response.body,
@@ -46,27 +71,20 @@ class ApiClient {
     }
   }
 
-
   Future<dynamic> get(
-      String endpoint, {
-        Map<String, String>? queryParams,
-      }) async {
-    final uri = Uri.parse('$baseUrl$endpoint')
-        .replace(queryParameters: queryParams);
+    String endpoint, {
+    Map<String, String>? queryParams,
+  }) async {
+    final uri = Uri.parse(
+      '$baseUrl$endpoint',
+    ).replace(queryParameters: queryParams);
 
-    final response = await client.get(
-      uri,
-      headers: await _getHeaders(),
-    );
+    final response = await client.get(uri, headers: await _getHeaders());
 
     return _handleResponse(response, endpoint);
   }
 
-
-  Future<dynamic> post(
-      String endpoint, {
-        Map<String, dynamic>? data,
-      }) async {
+  Future<dynamic> post(String endpoint, {Map<String, dynamic>? data}) async {
     final response = await client.post(
       Uri.parse('$baseUrl$endpoint'),
       headers: await _getHeaders(),
@@ -76,11 +94,7 @@ class ApiClient {
     return _handleResponse(response, endpoint);
   }
 
-
-  Future<dynamic> patch(
-      String endpoint, {
-        Map<String, dynamic>? data,
-      }) async {
+  Future<dynamic> patch(String endpoint, {Map<String, dynamic>? data}) async {
     final response = await client.patch(
       Uri.parse('$baseUrl$endpoint'),
       headers: await _getHeaders(),
@@ -90,11 +104,7 @@ class ApiClient {
     return _handleResponse(response, endpoint);
   }
 
-
-  Future<dynamic> delete(
-      String endpoint, {
-        Map<String, dynamic>? data,
-      }) async {
+  Future<dynamic> delete(String endpoint, {Map<String, dynamic>? data}) async {
     final response = await client.delete(
       Uri.parse('$baseUrl$endpoint'),
       headers: await _getHeaders(),
@@ -109,12 +119,8 @@ class ApiException implements Exception {
   final int statusCode;
   final String message;
 
-  ApiException({
-    required this.statusCode,
-    required this.message,
-  });
+  ApiException({required this.statusCode, required this.message});
 
   @override
-  String toString() =>
-      'ApiException ($statusCode): $message';
+  String toString() => 'ApiException ($statusCode): $message';
 }

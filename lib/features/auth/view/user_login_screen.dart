@@ -164,7 +164,7 @@ class _UserLoginScreenState extends State<UserLoginScreen> {
                       child: SocialButton(
                         label: 'Google',
                         icon: Image.network(
-                          // Public Google "G" mark (as in HTML)
+
                           'https://lh3.googleusercontent.com/aida-public/AB6AXuB5pjNwhUdJpn2-lBhdcyqyK5EJDVIA_HWJsKeNfwbeoG_749Uoqu025Lwt-sPyK2YYzAVlMyZyF1dqaDOFFulV02wZawDR2l_PX_U2pXjlDX1AMg0fgU5VP9P7Z4X912q9uiTZh63Lhl0jjtpSYau-kH5-1u1MCdjFCCIucEwKI-DwHAlHTHeqoXNzzBaUoMcKx_IiNshZ4rtmnFmNxnOx-dMLNTkaGTEwthRYn1FkvxAy_O8fXbIWSdga1p-PUJbLfmzfM_vLKaE',
                           width: 20,
                           height: 20,

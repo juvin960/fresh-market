@@ -35,8 +35,8 @@ class _EditAddressPageState extends State<EditAddressPage> {
               const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               decoration: BoxDecoration(
                   color: Theme.of(context).brightness == Brightness.light
-                      ? Colors.white.withOpacity(0.8)
-                      : Colors.black.withOpacity(0.8),
+                      ? Colors.white.withValues(alpha: 0.8)
+                      : Colors.black.withValues(alpha: 0.8),
                   border: Border(
                       bottom: BorderSide(
                           color: Theme.of(context).dividerColor, width: 1))),
@@ -89,7 +89,7 @@ class _EditAddressPageState extends State<EditAddressPage> {
                             width: 40,
                             height: 40,
                             decoration: BoxDecoration(
-                              color: Colors.green.withOpacity(0.2),
+                              color: Colors.green.withValues(alpha: 0.2),
                               shape: BoxShape.circle,
                             ),
                             child: Center(

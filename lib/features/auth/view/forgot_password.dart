@@ -72,7 +72,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       label: "Email Address",
                       hint: "name@example.com",
                       icon: Icons.mail,
-                      keyboardType: TextInputType.emailAddress,
+                      keyboardType: TextInputType.emailAddress, validator: (v) {  },
                     ),
                     const SizedBox(height: 24),
 

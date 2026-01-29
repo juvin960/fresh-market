@@ -27,6 +27,7 @@ class CustomTextField extends StatelessWidget {
     this.controller,
     this.errorText,
     this.fillColor,
+    required String? Function(dynamic v) validator,
   });
 
   @override

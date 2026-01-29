@@ -172,7 +172,7 @@ class RiderDashboardPage extends StatelessWidget {
           color: Colors.white,
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
-            BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10),
+            BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 10),
           ],
         ),
         child: Column(
@@ -231,7 +231,7 @@ class RiderDashboardPage extends StatelessWidget {
                   Row(
                     children: [
                       _statusBtn("Picked", false),
-                      _statusBtn("Enroute", true),
+                      _statusBtn("  En route", true),
                       _statusBtn("Delivered", true, filled: true),
                     ],
                   ),
@@ -391,7 +391,7 @@ class RiderDashboardPage extends StatelessWidget {
       child: Container(
         height: 70,
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.9),
+          color: Colors.white.withValues(alpha: 0.9),
           border:
           const Border(top: BorderSide(color: Color(0xFFEAEAEA))),
         ),
