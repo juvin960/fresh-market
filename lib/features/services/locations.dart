@@ -2,6 +2,8 @@ import 'package:get_it/get_it.dart';
 
 import '../auth/model/auth_model.dart';
 import '../auth/view_model/auth_view-model.dart';
+import '../screens/product/product_category/category_model.dart';
+import '../screens/product/product_category/category_view_model.dart';
 import 'api_client.dart';
 
 
@@ -14,4 +16,7 @@ void setupServiceLocator() {
 
   sl.registerLazySingleton<AuthModel>(() => AuthModel(sl<ApiClient>()));
   sl.registerLazySingleton<AuthViewModel>(() => AuthViewModel(sl<AuthModel>()));
+
+  sl.registerLazySingleton<CategoryModel>(() => CategoryModel(sl<ApiClient>()));
+  sl.registerLazySingleton<CategoryViewModel>(() => CategoryViewModel(sl<CategoryModel>()));
 }

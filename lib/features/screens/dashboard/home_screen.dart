@@ -111,7 +111,7 @@ class _FreshMarketHomeState extends State<FreshMarketHome> {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         scrollDirection: Axis.horizontal,
         children: [
-          _chip("All", active: true),
+          _chip("All", active: true ),
           _chip("Fruits"),
           _chip("Vegetables"),
           _chip("Dairy"),

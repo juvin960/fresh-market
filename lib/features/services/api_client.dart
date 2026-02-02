@@ -19,6 +19,8 @@ class ApiClient {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('auth_token');
 
+    debugPrint('Token from SharedPreferences: $token');
+
     return {
       ..._defaultHeaders,
       if (token != null && token.isNotEmpty) 'Authorization': 'Bearer $token',

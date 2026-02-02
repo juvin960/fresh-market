@@ -1,30 +1,52 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../widgets/category_card.dart';
 import '../../../core/app_colors.dart';
+import 'category_view_model.dart';
 
-class CategoriesPage extends StatelessWidget {
+
+class CategoriesPage extends StatefulWidget {
   const CategoriesPage({super.key});
 
   static const primary = Color(0xFF13EC13);
 
   @override
-  Widget build(BuildContext context) {
+  State<CategoriesPage> createState() => _CategoriesPageState();
+}
 
+class _CategoriesPageState extends State<CategoriesPage> {
+
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final vm = Provider.of<CategoryViewModel>(context, listen: false);
+      vm.fetchCategory();
+    });
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+    final vm = Provider.of<CategoryViewModel>(context);
 
     return Scaffold(
-
       body: SafeArea(
         child: Column(
           children: [
             _header(),
             _filters(),
-            Expanded(child: _categoriesGrid()),
+            Expanded(child: _categoriesGrid(vm)),
           ],
         ),
       ),
+      // bottomNavigationBar: _bottomNav(),
     );
   }
+
+
 
   Widget _header() {
     return Padding(
@@ -55,13 +77,12 @@ class CategoriesPage extends StatelessWidget {
     );
   }
 
-  Widget _iconButton(IconData icon,
-      {bool badge = false, bool filled = false}) {
+  Widget _iconButton(IconData icon, {bool badge = false, bool filled = false}) {
     return Stack(
       children: [
         CircleAvatar(
           radius: 20,
-          backgroundColor: filled ? AppColors.accent: Colors.white,
+          backgroundColor: filled ? AppColors.accent : Colors.white,
           child: Icon(icon, color: filled ? Colors.black : Colors.grey[800]),
         ),
         if (badge)
@@ -99,9 +120,9 @@ class CategoriesPage extends StatelessWidget {
     );
   }
 
+
   Widget _filters() {
     final filters = ["All", "On Sale", "New Batches", "Seasonal"];
-
     return SizedBox(
       height: 48,
       child: ListView.separated(
@@ -124,121 +145,90 @@ class CategoriesPage extends StatelessWidget {
     );
   }
 
-  Widget _categoriesGrid() {
-    return GridView.count(
-      padding: const EdgeInsets.fromLTRB(16, 12, 16, 120),
-      crossAxisCount: 2,
-      crossAxisSpacing: 12,
-      mainAxisSpacing: 12,
-      childAspectRatio: 0.78,
-      children: const [
-        CategoryCard(
-          title: "Fruits",
-          items: "120 items",
-          image:
-          "https://lh3.googleusercontent.com/aida-public/AB6AXuB8RaKAQsHuuHuAGtFGNbHro5zxrgSORLZHLe8ltmBpDJ5E4F989GYJjP6dMGoYivY1zea8brtG640FYXWYVLzOxEAHqDhWYRjtAeP9Z7Ewb8o7gg0q3C1iXbnTANEC3LToLyXK09bLLYCLXP2sILv9w98nuMwOK2451tl19C_yw8EJC7Epl3sXimH0vL_nVtrgdi87p_M4pMo3G7dlIKScDwyjMUB_nHx8HW9i83ckY9hgi9j4JcrwHKvxOHRBncqYZDxRHDldOuc",
-          tag: "Fresh Batch",
-        ),
-        CategoryCard(
-          title: "Vegetables",
-          items: "95 items",
-          image:
-          "https://lh3.googleusercontent.com/aida-public/AB6AXuAkSu2WuK2_2L1f4q8gxTvIUTxpT-Rij9kuRfX8zsgcVCyiTUASLWiudsJ3lPzs3hbvkfVpAzAOKqC7Puc9Dz_-9X1iNuNmYT7OvWW3WOkDNbxIdZ1u25xbI1PfPguZZ3Gy6CcIs_EPc2kuuJhrsaxHakjuENk2fPx67neM_8rW62jut0iBOyK2hISJaJzj3HlMyiH2O-ZdIBrqfwwg3Ztyi04tIlneCC1y-iukXHwzY-Q-q3ZrPgMWAEYw2x4m94838gCpBGXsmAI",
-        ),
-        CategoryCard(
-          title: "Grains",
-          items: "40 items",
-          image:
-          "https://lh3.googleusercontent.com/aida-public/AB6AXuANSok-tpimrxz3oZ4mzEo6RjrzxwXmV3kFgpST43ms3DyuaUcPOl7zSGtC4RZCnPwgL7Kji-rOCw1NROMPRVth1xHVsjQp-xylj8QbkpNkBtxVcBKxvbUYzWjyNAN_f7BJOobt2z-oN8ceIN8IWVdod5QgdQnCL97961u5YAmfPaqvyxAdjbxWkRyBDSTk8EOLiBNxS7W8_8es8Jd_BWigL_lsj1Q6lOORxoPRdrXvkoswszoes_tJB7b5cfC7BVnN9tJGnbnXISQ",
-        ),
-        CategoryCard(
-          title: "Dairy",
-          items: "30 items",
-          image:
-          "https://lh3.googleusercontent.com/aida-public/AB6AXuA1lrvAelb0B8bB63P3CIcsvMTdEoEHkPWt1MQJTJcJjdFN0r39MqNlBuWQDrykHeNlLAFA04uVdK8-pSefCaDb-PYMsANJNKzjJTRfXOMAB6RFKbaJgOgtX-oWRhpHaeMpUW0aqgSyEbu1-cS2wnWpREiR-HCzRhlSI5_MHO-fp6kh4Q4o6l6TFH8C3v4BiG8Iph22R_DuNg2926iA4_e6zks6ndry2Ibbx6AzJ6p2nxspO_XS52NruscQLAWyzESGdRhnoapYhi0",
-          tag: "Cool",
-        ),
-        CategoryCard(
-          title: 'Organics',
-          items: '55 items',
-          image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuA3rGJrGyXUqA5pxcd4YK817UVGsWh_X8RSrxQj4UPJGIWHKfY1vAY19mYIHP0qCpfuFqxNH6kMlH3tx-Q2j0nlDDHUmQJpnCJvi1UXh2u3q22Ms_2fSBYI6pRzgW4RsR6RhjhEadPZLId2MxfnBIURWrxr-FYxrJrjIH2j-SGL7fqnhCFTd_X5cM__G6epK7W9LPDTGmCewOBd_0RKNCOV4MEZavsH8yw8yaSC74mbA5TQsO8IyL32m-H6g-eAfJU-mhszqUZPcGM',
-          tag: 'BIO',
 
-        ),
-        CategoryCard(
-          title: 'Batch Deals',
-          items: 'Bulk savings',
-          image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBUi-ZTo-425v0fX6ay4xxT9ODMtgzPeV_QLr_reQEcfgRQ-va9YBrPQ7EmN22eZF7cVEmNWMvMLwc4Z1SWLnOlPLs3v_1JpnGFNKW7a-HxYkyoXwUDWMNg-x8qQ0jftdUzIXgGuzfuaGKVTeR1h5r8O4BWEL1KLUTMJq1oqva0x99PKy0Vh9dXhpk1sPKyBCrvOMSRp6UP89a2G9SoyQIYRJv7FdiANlcTqOBDspNJsC7_h__mGDTq4Dnap93xEDWKu4gt8Y9C1NU',
-          tag: 'SAVE 20%',
+  Widget _categoriesGrid(CategoryViewModel vm) {
+    final vm = Provider.of<CategoryViewModel>(context);
 
-        ),
-        CategoryCard(
-          title: 'Proteins',
-          items: '28 items',
-          image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDr1PRXQsTTNRK4vwB9th79WeeHa_AwzjCSL62EU8uS3i2VSjc3GqtnD-KsfzK6FvedmX9J-XpcLeYjgYfikCj1iHyAIAyUHbfOTEOdb9nCjv_24vLG-bpb3KB6dpeEK0lb5wtYcc9VXryRFfaTu6TpiOMH6YZWpym8iJfAz3Q0i1OB65qHRHNkqWqgrMCQj_LlUIlYhFOM-3qAOWG2WsXrhISqFQgiJJ1IRIASm5vXCg-APTzrBefQ9ZVRhittKP6tXdeMSA_VZVY',
-        ),
-        CategoryCard(
-          title: 'Bakery',
-          items: '42 items',
-          image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuB-TMdqljkWmaVFhqijUjOj5UpJQU8FDzcAW4RjGs0J8YuAsAqm4M7-R7Z88BlaqOqT-pIqaxtnsSNaTNSg1nJ-X7yyEesq2DwB8JCWd-4kwfcxG7ZhNvXRL_SseKqhLKvV6SrtwwCufooL7yjdi_xaXDjH-LHChDZetw9h9sd8hDyzU-S0poYDiemQCky1PCgxgoBVKEhOxerxyhGi2LrptaVddD7AGOtPY92iv4L30gSYbYHXMe-6NVCzEbHdXX0vO9Kg_L4-XTE',
-        ),
-      ],
-    );
-  }
+    if (vm.isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
 
-  Widget _bottomNav() {
-    return Positioned(
-      bottom: 0,
-      left: 0,
-      right: 0,
-      child: Container(
-        padding: const EdgeInsets.only(bottom: 16, top: 12),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          border: Border(top: BorderSide(color: Colors.black12)),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            _navItem(Icons.home, "Home"),
-            _navItem(Icons.grid_view, "Categories", active: true),
-            FloatingActionButton(
-              backgroundColor: primary,
-              onPressed: () {},
-              child: const Icon(Icons.qr_code_scanner, color: Colors.black),
-            ),
-            _navItem(Icons.shopping_cart, "Cart", badge: true),
-            _navItem(Icons.person, "Profile"),
-          ],
-        ),
+    if (vm.errorMessage != null) {
+      return Center(child: Text(vm.errorMessage!));
+    }
+
+    final categories = vm.category;
+
+    if (categories.isEmpty) {
+      return const Center(child: Text("No categories available"));
+    }
+
+    return GridView.builder(
+      padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        crossAxisSpacing: 12,
+        mainAxisSpacing: 12,
+        childAspectRatio: 0.78,
       ),
+      itemCount: categories.length,
+      itemBuilder: (context, index) {
+        final cat = categories[index];
+        return CategoryCard(
+          title: cat.name,
+          items: "${cat.name} items",
+          image: 'https://via.placeholder.com/150',
+        );
+      },
     );
   }
 
-  Widget _navItem(IconData icon, String label,
-      {bool active = false, bool badge = false}) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Stack(
-          children: [
-            Icon(icon, color: active ? primary : Colors.grey),
-            if (badge)
-              const Positioned(
-                top: 0,
-                right: 0,
-                child: CircleAvatar(radius: 4, backgroundColor: Colors.red),
-              )
-          ],
-        ),
-        const SizedBox(height: 4),
-        Text(label,
-            style: TextStyle(
-                fontSize: 10,
-                color: active ? primary : Colors.grey)),
-      ],
-    );
-  }
+
+  // Widget _bottomNav() {
+  //   return Container(
+  //     padding: const EdgeInsets.only(bottom: 16, top: 12),
+  //     decoration: const BoxDecoration(
+  //       color: Colors.white,
+  //       border: Border(top: BorderSide(color: Colors.black12)),
+  //     ),
+  //     child: Row(
+  //       mainAxisAlignment: MainAxisAlignment.spaceAround,
+  //       children: [
+  //         _navItem(Icons.home, "Home"),
+  //         _navItem(Icons.grid_view, "Categories", active: true),
+  //         FloatingActionButton(
+  //           backgroundColor: CategoriesPage.primary,
+  //           onPressed: () {},
+  //           child: const Icon(Icons.qr_code_scanner, color: Colors.black),
+  //         ),
+  //         _navItem(Icons.shopping_cart, "Cart", badge: true),
+  //         _navItem(Icons.person, "Profile"),
+  //       ],
+  //     ),
+  //   );
+  // }
+  //
+  // Widget _navItem(IconData icon, String label, {bool active = false, bool badge = false}) {
+  //   return Column(
+  //     mainAxisSize: MainAxisSize.min,
+  //     children: [
+  //       Stack(
+  //         children: [
+  //           Icon(icon, color: active ? CategoriesPage.primary : Colors.grey),
+  //           if (badge)
+  //             const Positioned(
+  //               top: 0,
+  //               right: 0,
+  //               child: CircleAvatar(radius: 4, backgroundColor: Colors.red),
+  //             )
+  //         ],
+  //       ),
+  //       const SizedBox(height: 4),
+  //       Text(
+  //         label,
+  //         style: TextStyle(fontSize: 10, color: active ? CategoriesPage.primary : Colors.grey),
+  //       ),
+  //     ],
+  //   );
+  // }
 }
-
-
