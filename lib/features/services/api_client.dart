@@ -28,40 +28,17 @@ class ApiClient {
   bool _isSuccess(int code) => code == 200;
 
   dynamic _handleResponse(http.Response response, String endpoint) {
-    // debugPrint('[$endpoint] ${response.statusCode}');
-    // debugPrint(response.body);
-    //
-    // if (_isSuccess(response.statusCode)) {
-    //   return response.body.isNotEmpty
-    //       ? {
-    //         'body': jsonDecode(response.body),
-    //         'statusCode': response.statusCode,
-    //       }
-    //       : null;
-    // } else {
-    //   throw ApiException(
-    //     statusCode: response.statusCode,
-    //     message: response.body,
-    //   );
-    // }
-
     try {
       debugPrint('[$endpoint] ${response.statusCode}');
       debugPrint(response.body);
-      return {
-        'body': jsonDecode(response.body),
-        'statusCode': response.statusCode,
-      };
 
-      if (_isSuccess(response.statusCode)) {
-        return response.body.isNotEmpty
-            ? {
-          'body': jsonDecode(response.body),
-          'statusCode': response.statusCode,
-        }
-            : null;
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
       } else {
-
+        throw ApiException(
+          statusCode: response.statusCode,
+          message: response.body,
+        );
       }
     } catch (e) {
       throw ApiException(
@@ -70,6 +47,7 @@ class ApiClient {
       );
     }
   }
+
 
   Future<dynamic> get(
     String endpoint, {
@@ -124,3 +102,29 @@ class ApiException implements Exception {
   @override
   String toString() => 'ApiException ($statusCode): $message';
 }
+// debugPrint('[$endpoint] ${response.statusCode}');
+// debugPrint(response.body);
+//
+// if (_isSuccess(response.statusCode)) {
+//   return response.body.isNotEmpty
+//       ? {
+//         'body': jsonDecode(response.body),
+//         'statusCode': response.statusCode,
+//       }
+//       : null;
+// } else {
+//   throw ApiException(
+//     statusCode: response.statusCode,
+//     message: response.body,
+//   );
+// }
+// if (_isSuccess(response.statusCode)) {
+// return response.body.isNotEmpty
+// ? {
+// 'body': jsonDecode(response.body),
+// 'statusCode': response.statusCode,
+// }
+//     : null;
+// } else {
+//
+// }

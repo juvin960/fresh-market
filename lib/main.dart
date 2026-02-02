@@ -3,6 +3,7 @@ import 'package:fresh_market_app/features/auth/view/user_login_screen.dart';
 import 'package:fresh_market_app/features/auth/view/user_registration_screen.dart';
 import 'package:fresh_market_app/features/core/app_colors.dart';
 import 'package:provider/provider.dart';
+import 'features/auth/view/splash_screen.dart';
 import 'features/auth/view_model/auth_view-model.dart';
 import 'features/services/locations.dart';
 
@@ -11,7 +12,7 @@ import 'features/services/locations.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   setupServiceLocator();
-  print("AuthViewModel registered at startup: ${sl.isRegistered<AuthViewModel>()}");
+
 
   runApp(const MyApp());
 }
@@ -35,7 +36,7 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
           fontFamily: 'PlusJakartaSans',
         ),
-        home: const UserLoginScreen(),
+        home: const SplashScreen(),
       ),
     );
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../model/auth_model.dart';
 
@@ -13,21 +14,16 @@ class AuthViewModel extends ChangeNotifier {
 
 
   Future<bool> login(String email, String password) async {
-
     isLoading = true;
     notifyListeners();
 
     try {
-
       final success = await _authModel.login(email, password);
-
       isLoading = false;
       notifyListeners();
 
       return success;
-
     } catch (e) {
-
       isLoading = false;
       notifyListeners();
 
@@ -69,9 +65,10 @@ Future<bool> register(
     }
   }
 
-
-  Future<bool> checkLogin() async {
-    return await _authModel.isLoggedIn();
+  Future<bool> isLoggedIn() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+    return token != null && token.isNotEmpty;
   }
 
 

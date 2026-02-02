@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:fresh_market_app/features/services/end_points.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../services/api_client.dart';
@@ -31,34 +32,37 @@ class AuthModel {
       return false;
     }
   }
-
-
-
-  Future<bool> _saveUserData(Map<String, dynamic> decoded) async {
+  Future<bool> _saveUserData(Map<String, dynamic> response) async {
     try {
-      final body = decoded['body'] ?? decoded;
+      final token = response['data']?['token'];
 
-      final token = body['data']?['token'];
-
-      if (token == null || token.isEmpty) {
-        print('Token missing in response.');
+      if (token == null || token.trim().isEmpty) {
+        debugPrint(' Token missing in response: $response');
         return false;
       }
 
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('auth_token', token);
-      await prefs.setString('user_name', body['data']?['name'] ?? '');
-      await prefs.setString('user_email', body['data']?['email'] ?? '');
+      await prefs.setString('user_name', response['data']?['name'] ?? '');
+      await prefs.setString('user_email', response['data']?['email'] ?? '');
 
-      print('Token saved successfully');
+      debugPrint(' Token saved successfully');
       return true;
     } catch (e) {
-      print('Error saving user data: $e');
+      debugPrint('Error saving user data: $e');
       return false;
     }
   }
 
+  Future<String?> getToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('auth_token');
+  }
 
+  Future<bool> isLoggedIn() async {
+    final token = await getToken();
+    return token != null && token.trim().isNotEmpty;
+  }
 
 
 
@@ -126,21 +130,11 @@ class AuthModel {
     } catch (e, st) {
 
       print('Register error: $e\n$st');
-      throw Exception('${e.toString()}');
+      throw Exception(e.toString());
     }
   }
 
 
-  Future<String?> getToken() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getString('auth_token');
-  }
-
-
-  Future<bool> isLoggedIn() async {
-    final token = await getToken();
-    return token != null;
-  }
 
 
   Future<void> logout() async {

@@ -8,7 +8,7 @@ import 'package:fresh_market_app/features/screens/product/product_category/produ
 import '../product/product_list/product_listing_screen.dart';
 
 class BottomNavigation extends StatefulWidget {
-  const BottomNavigation({Key? key}) : super(key: key);
+  const BottomNavigation({super.key});
 
   @override
   State<BottomNavigation> createState() => _BottomNavigationState();
