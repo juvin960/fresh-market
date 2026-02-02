@@ -11,7 +11,7 @@ class AuthModel {
 
   Future<bool> login(String email, String password) async {
     try {
-      final response = await _client.post(
+      final decoded = await _client.post(
         Endpoints.login,
         data: {
           'email': email,
@@ -19,17 +19,47 @@ class AuthModel {
         },
       );
 
-      if (response.statusCode == 200) {
-        final decoded = jsonDecode(response.body);
-        return await _saveUserData(decoded);
-      } else {
-        final decoded = jsonDecode(response.body);
-        throw decoded['message'] ?? 'Login failed';
+
+      if (decoded['errorOccurred'] == true) {
+        print('Login failed: ${decoded['message']}');
+        return false;
       }
+      final saved = await _saveUserData(decoded);
+      return saved;
     } catch (e) {
-      throw Exception("Login error: $e");
+      print("Login error: $e");
+      return false;
     }
   }
+
+
+
+  Future<bool> _saveUserData(Map<String, dynamic> decoded) async {
+    try {
+      final body = decoded['body'] ?? decoded;
+
+      final token = body['data']?['token'];
+
+      if (token == null || token.isEmpty) {
+        print('Token missing in response.');
+        return false;
+      }
+
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('auth_token', token);
+      await prefs.setString('user_name', body['data']?['name'] ?? '');
+      await prefs.setString('user_email', body['data']?['email'] ?? '');
+
+      print('Token saved successfully');
+      return true;
+    } catch (e) {
+      print('Error saving user data: $e');
+      return false;
+    }
+  }
+
+
+
 
 
   Future<bool> register({
@@ -99,37 +129,6 @@ class AuthModel {
       throw Exception('${e.toString()}');
     }
   }
-
-
-  Future<bool> _saveUserData(Map<String, dynamic> decoded) async {
-
-    final token =
-        decoded['data']?['token'] ??
-            decoded['token'];
-
-    if (token is String && token.isNotEmpty) {
-
-      final prefs = await SharedPreferences.getInstance();
-
-      await prefs.setString('auth_token', token);
-      await prefs.setString(
-          'user_name',
-          decoded['data']?['name'] ??
-              decoded['name'] ??
-              '');
-
-      await prefs.setString(
-          'user_email',
-          decoded['data']?['email'] ??
-              decoded['email'] ??
-              '');
-
-      return true;
-    }
-
-    throw Exception("Token missing from response: $decoded");
-  }
-
 
 
   Future<String?> getToken() async {

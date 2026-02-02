@@ -4,10 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:fresh_market_app/widgets/buttons/custom_button.dart';
 import 'package:fresh_market_app/widgets/input_fields/build_text_field.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
-
-import '../../../widgets/buttons/social_button.dart';
-import '../../../widgets/dividers/labelled_divider.dart';
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import '../../core/app_colors.dart';
 import '../../screens/dashboard/bottom_navigation_bar.dart';
 import '../../services/locations.dart';
@@ -23,8 +20,9 @@ class _UserRegistrationScreenState extends State<UserRegistrationScreen> {
   bool agreeToTerms = false;
   bool obscurePassword = true;
   bool isLoading = false;
+  PhoneNumber? phone;
 
-  // Controllers for form fields
+
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
@@ -83,48 +81,42 @@ class _UserRegistrationScreenState extends State<UserRegistrationScreen> {
                 CustomTextField(
                   controller: nameController,
                   label: "Full Name",
-                  hint: "John Doe",
+                  hint: "",
                   icon: Icons.person,
                   validator: (v) =>
                   v == null || v.isEmpty ? "Enter your name" : null,
                 ),
 
-                // EMAIL
                 CustomTextField(
+                  label: "Email",
+                  hint: "",
+                  icon: Icons.email,
                   controller: emailController,
-                  label: "Email Address",
-                  hint: "name@example.com",
-                  icon: Icons.mail,
-                  keyboardType: TextInputType.emailAddress,
-                  validator: (v) => v == null || !v.contains("@")
-                      ? "Enter a valid email"
-                      : null,
+                  fieldType: FieldType.email,
                 ),
 
-                // PHONE
                 CustomTextField(
-                  controller: phoneController,
-                  label: "Phone Number",
-                  hint: "+254 000-0000",
-                  icon: Icons.phone_iphone,
-                  keyboardType: TextInputType.phone,
-                  validator: (v) =>
-                  v == null || v.length < 9 ? "Enter a valid phone" : null,
+                  label: "Phone",
+                  hint: "",
+                  icon: Icons.phone,
+                  isPhone: true,
+                  fieldType: FieldType.phone,
+                  onPhoneChanged: (number) {
+                    phone = number;
+                  },
                 ),
 
-                // PASSWORD
                 CustomTextField(
-                  controller: passwordController,
                   label: "Password",
-                  hint: "......",
-                  icon: obscurePassword
-                      ? Icons.visibility_off
-                      : Icons.visibility,
-                  obscureText: obscurePassword,
-                  onIconTap: () => setState(() => obscurePassword = !obscurePassword),
-                  validator: (v) =>
-                  v == null || v.length < 6 ? "Password too short" : null,
+                  hint: "",
+                  icon: Icons.visibility,
+                  obscureText: true,
+                  controller: passwordController,
+                  fieldType: FieldType.password,
                 ),
+
+
+
                 const SizedBox(height: 12),
 
                 // TERMS
