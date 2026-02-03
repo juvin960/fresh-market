@@ -42,11 +42,8 @@ class _CategoriesPageState extends State<CategoriesPage> {
           ],
         ),
       ),
-      // bottomNavigationBar: _bottomNav(),
     );
   }
-
-
 
   Widget _header() {
     return Padding(
@@ -183,52 +180,4 @@ class _CategoriesPageState extends State<CategoriesPage> {
     );
   }
 
-
-  // Widget _bottomNav() {
-  //   return Container(
-  //     padding: const EdgeInsets.only(bottom: 16, top: 12),
-  //     decoration: const BoxDecoration(
-  //       color: Colors.white,
-  //       border: Border(top: BorderSide(color: Colors.black12)),
-  //     ),
-  //     child: Row(
-  //       mainAxisAlignment: MainAxisAlignment.spaceAround,
-  //       children: [
-  //         _navItem(Icons.home, "Home"),
-  //         _navItem(Icons.grid_view, "Categories", active: true),
-  //         FloatingActionButton(
-  //           backgroundColor: CategoriesPage.primary,
-  //           onPressed: () {},
-  //           child: const Icon(Icons.qr_code_scanner, color: Colors.black),
-  //         ),
-  //         _navItem(Icons.shopping_cart, "Cart", badge: true),
-  //         _navItem(Icons.person, "Profile"),
-  //       ],
-  //     ),
-  //   );
-  // }
-  //
-  // Widget _navItem(IconData icon, String label, {bool active = false, bool badge = false}) {
-  //   return Column(
-  //     mainAxisSize: MainAxisSize.min,
-  //     children: [
-  //       Stack(
-  //         children: [
-  //           Icon(icon, color: active ? CategoriesPage.primary : Colors.grey),
-  //           if (badge)
-  //             const Positioned(
-  //               top: 0,
-  //               right: 0,
-  //               child: CircleAvatar(radius: 4, backgroundColor: Colors.red),
-  //             )
-  //         ],
-  //       ),
-  //       const SizedBox(height: 4),
-  //       Text(
-  //         label,
-  //         style: TextStyle(fontSize: 10, color: active ? CategoriesPage.primary : Colors.grey),
-  //       ),
-  //     ],
-  //   );
-  // }
 }

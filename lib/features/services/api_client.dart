@@ -19,7 +19,7 @@ class ApiClient {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('auth_token');
 
-    debugPrint('Token from SharedPreferences: $token');
+    debugPrint('Token >>> $token');
 
     return {
       ..._defaultHeaders,
@@ -104,29 +104,3 @@ class ApiException implements Exception {
   @override
   String toString() => 'ApiException ($statusCode): $message';
 }
-// debugPrint('[$endpoint] ${response.statusCode}');
-// debugPrint(response.body);
-//
-// if (_isSuccess(response.statusCode)) {
-//   return response.body.isNotEmpty
-//       ? {
-//         'body': jsonDecode(response.body),
-//         'statusCode': response.statusCode,
-//       }
-//       : null;
-// } else {
-//   throw ApiException(
-//     statusCode: response.statusCode,
-//     message: response.body,
-//   );
-// }
-// if (_isSuccess(response.statusCode)) {
-// return response.body.isNotEmpty
-// ? {
-// 'body': jsonDecode(response.body),
-// 'statusCode': response.statusCode,
-// }
-//     : null;
-// } else {
-//
-// }

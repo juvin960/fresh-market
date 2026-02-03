@@ -34,19 +34,22 @@ class AuthModel {
   }
   Future<bool> _saveUserData(Map<String, dynamic> response) async {
     try {
-      final token = response['data']?['token'];
 
-      if (token == null || token.trim().isEmpty) {
+      final token = response['data']?['access_token']
+          ?? response['access_token'];
+
+      if (token == null || token.toString().trim().isEmpty) {
         debugPrint(' Token missing in response: $response');
         return false;
       }
 
       final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('auth_token', token);
+      await prefs.setString('auth_token', token.toString());
+
       await prefs.setString('user_name', response['data']?['name'] ?? '');
       await prefs.setString('user_email', response['data']?['email'] ?? '');
 
-      debugPrint(' Token saved successfully');
+      debugPrint('Token saved successfully: $token');
       return true;
     } catch (e) {
       debugPrint('Error saving user data: $e');

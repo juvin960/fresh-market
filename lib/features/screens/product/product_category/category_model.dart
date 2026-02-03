@@ -30,20 +30,18 @@ class CategoryModel {
   CategoryModel(this._client);
 
   Future<List<Category>> getAllCategories() async {
-    final response = await _client.get(Endpoints.getAllCategories);
+    final Map<String, dynamic> response =
+    await _client.get(Endpoints.getAllCategories);
 
-    if (response.statusCode == 200) {
-      final decoded = jsonDecode(response.body) as Map<String, dynamic>;
-      final dynamic raw = decoded['data'] ?? decoded['items'] ?? [];
-      final List<dynamic> rawList = raw is List ? raw : [];
+    final dynamic raw = response['data'] ?? response['items'] ?? [];
 
-      return rawList.map((e) {
-        final Map<String, dynamic> item =
-        e is Map<String, dynamic> ? e : Map<String, dynamic>.from(e as Map);
-        return Category.fromJson(item);
-      }).toList();
-    } else {
-      throw Exception('Failed to load categories: ${response.statusCode}');
-    }
+    final List<dynamic> rawList = raw is List ? raw : [];
+
+    return rawList.map((e) {
+      return Category.fromJson(
+        Map<String, dynamic>.from(e),
+      );
+    }).toList();
   }
 }
+
