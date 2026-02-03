@@ -6,6 +6,7 @@ import 'features/auth/view/splash_screen.dart';
 import 'features/auth/view_model/auth_view-model.dart';
 import 'features/screens/product/product_category/category_view_model.dart';
 
+import 'features/screens/product/product_list/product_view_model.dart';
 import 'features/services/locations.dart';
 
 
@@ -27,7 +28,8 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => sl<AuthViewModel>()),
-        ChangeNotifierProvider(create: (_) => sl<CategoryViewModel>())
+        ChangeNotifierProvider(create: (_) => sl<CategoryViewModel>()),
+        ChangeNotifierProvider(create: (_) => sl<ProductViewModel>())
 
       ],
       child: MaterialApp(
