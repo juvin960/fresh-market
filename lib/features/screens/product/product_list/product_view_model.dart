@@ -13,22 +13,21 @@ class ProductViewModel extends ChangeNotifier {
   String? errorMessage;
 
 
-  Future<void> fetchProducts() async {
+  Future<void> fetchProducts({String? categoryId}) async {
     try {
       isLoading = true;
       notifyListeners();
 
-      final data = await _model.getAllProducts();
+      final data = await _model.getAllProducts(categoryId: categoryId);
 
       _allProducts = data;
       products = List.from(_allProducts);
 
-
-      categories = _allProducts.map((e) => e.category ?? "Unknown").toSet().toList();
-
       isLoading = false;
       notifyListeners();
-    } catch (e) {
+    } catch (e, stackTrace) {
+      debugPrint("error is ${e.toString()}");
+      debugPrint(stackTrace.toString());
       isLoading = false;
       errorMessage = e.toString();
       notifyListeners();

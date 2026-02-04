@@ -143,6 +143,7 @@ class _FreshMarketHomeState extends State<FreshMarketHome> {
           image: const DecorationImage(
             image: NetworkImage(
                 "https://lh3.googleusercontent.com/aida-public/AB6AXuCew6LCcPtnSlUB7j0yrACt0VeubJ0rKnUnOO9fmDJPrgRqoLLQ_A7iKlK1fNjWTS0OknTs-cG6EOpOW5DwJzJz9i8iT7YGLMLLTFtp3_goYw1AxoGpnZhdN_K0zidxZBeu8iDlW0RWNyKDdnoHlBXDHMYMOV_P_zyO8oe_0QZeDsy6Hu-Fea6x4gH4HpgpqKYGfAZuZGXNhp7DxKlEuFMNZGnnL-tsHYKGB1beS5fC2HL65xkMurc3boOnDztMRoNZhYVeys2hgS8"),
+
             fit: BoxFit.cover,
           ),
         ),

@@ -5,10 +5,13 @@ import '../../../services/end_points.dart';
 class Category{
   final String id;
   final String name;
+  bool isSelected;
+
 
   Category({
     required this.id,
     required this.name,
+    this.isSelected = false
   });
 
   factory Category.fromJson(Map<String, dynamic> json) {
@@ -33,7 +36,7 @@ class CategoryModel {
     final Map<String, dynamic> response =
     await _client.get(Endpoints.getAllCategories);
 
-    final dynamic raw = response['data'] ?? response['items'] ?? [];
+    final dynamic raw = response['data'] ?? [];
 
     final List<dynamic> rawList = raw is List ? raw : [];
 

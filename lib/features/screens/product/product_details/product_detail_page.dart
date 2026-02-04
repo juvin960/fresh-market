@@ -11,6 +11,7 @@ class ProductDetailsPage extends StatefulWidget {
 class _ProductDetailsPageState extends State<ProductDetailsPage> {
   double quantityKg = 2.0;
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,7 +48,6 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
     );
   }
 
-  // ---------------- UI SECTIONS ----------------
 
   Widget _buildAppBar() {
     return Container(

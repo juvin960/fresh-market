@@ -1,5 +1,6 @@
 import '../../../services/api_client.dart';
 import '../../../services/end_points.dart';
+
 class Product {
   final String id;
   final String name;
@@ -7,6 +8,8 @@ class Product {
   final String? unit;
   final String? category;
   final String? imageUrl;
+  final String? description;
+ // final bool isFreshProduce;
 
   Product({
     required this.id,
@@ -15,16 +18,20 @@ class Product {
     this.unit,
     this.category,
     this.imageUrl,
+    this.description,
+
   });
 
   factory Product.fromJson(Map<String, dynamic> json) {
     return Product(
       id: json['id'].toString(),
       name: json['name'] ?? '',
-      price: (json['price'] ?? 0).toDouble(),
-      unit: json['unit'] ?? 'per unit',
-      category: json['category'] ?? 'Fresh',
+      price: double.parse(json['base_price'] ?? "0"),
+      unit: json['unit_type'] ?? 'per unit',
+      category: json['category']["name"] ?? '',
       imageUrl: json['image_url'],
+      description: json['description'] ?? "",
+      //isFreshProduce: json['is_fresh_produce'] ?? false,
     );
   }
 }
@@ -34,20 +41,17 @@ class ProductModel {
 
   ProductModel(this._client);
 
-  Future<List<Product>> getAllProducts({String? categoryUuid}) async {
+  Future<List<Product>> getAllProducts({String? categoryId}) async {
     final Map<String, dynamic> response = await _client.get(
       Endpoints.getAllProducts,
-      queryParams: categoryUuid != null ? {'category_uuid': categoryUuid} : null,
+      queryParams: categoryId != null ? {'category_id': categoryId} : null,
     );
 
-
-    final List<dynamic> rawList = (response['data']?['data'] ?? []) as List<dynamic>;
+    final List<dynamic> rawList =
+        (response['data']?['data'] ?? []) as List<dynamic>;
 
     return rawList.map((e) {
-      return Product.fromJson(
-        Map<String, dynamic>.from(e),
-      );
+      return Product.fromJson(Map<String, dynamic>.from(e));
     }).toList();
   }
 }
-

@@ -12,14 +12,18 @@ class CategoryViewModel extends ChangeNotifier {
   List<Category> categories = [];
   bool _isLoading = false;
   String? _errorMessage;
+  bool _isSelected = false;
 
   List<Category> get category => categories;
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
+  bool get isSelected => _isSelected;
 
 
   Future<void> fetchCategory() async {
     try {
+
+      _isSelected = false;
       _isLoading = true;
       _errorMessage = null;
       notifyListeners();
@@ -27,6 +31,8 @@ class CategoryViewModel extends ChangeNotifier {
       debugPrint('Fetching categories...');
 
       categories = await _model.getAllCategories();
+      Category allCategory = Category(id: "0", name: "All", isSelected: true);
+      categories.insert(0, allCategory);
 
       debugPrint('Fetched ${category.length} categories');
     } catch (e) {
