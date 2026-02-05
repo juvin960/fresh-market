@@ -12,7 +12,7 @@ import 'api_client.dart';
 final sl = GetIt.instance;
 
 void setupServiceLocator() {
-  const String baseUrl = 'http://192.168.1.104:8000/api';
+  const String baseUrl = 'http://192.168.0.106:8000/api';
 
   sl.registerLazySingleton<ApiClient>(() => ApiClient(baseUrl: baseUrl));
 

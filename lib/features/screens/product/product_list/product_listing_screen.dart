@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fresh_market_app/features/screens/product/product_category/category_model.dart';
+import 'package:fresh_market_app/features/screens/product/product_list/product.model.dart';
 import 'package:fresh_market_app/features/screens/product/product_list/product_view_model.dart';
 import 'package:provider/provider.dart';
 import '../../../core/app_colors.dart';
@@ -14,7 +15,10 @@ class MarketplacePage extends StatefulWidget {
 }
 
 class _MarketplacePageState extends State<MarketplacePage> {
+  final ScrollController _scrollController = ScrollController();
   late ProductViewModel productsViewModel;
+  int _selectedCategoryId = 0;
+  bool _isAllCatgorySelected = true;
 
   @override
   void initState() {
@@ -25,7 +29,16 @@ class _MarketplacePageState extends State<MarketplacePage> {
       productsViewModel = Provider.of<ProductViewModel>(context, listen: false);
       productsViewModel.fetchProducts();
     });
+    _scrollController.addListener(_scrollListener);
+
   }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -159,6 +172,9 @@ class _MarketplacePageState extends State<MarketplacePage> {
               return GestureDetector(
                   onTap: () {
                     category.isSelected = true;
+                    _selectedCategoryId =  category.id;
+
+                    category.id == 0 ? _isAllCatgorySelected = true :  _isAllCatgorySelected = false;
 
                     for (var cat in vm.categories) {
                       if (cat.id != category.id) {
@@ -168,7 +184,7 @@ class _MarketplacePageState extends State<MarketplacePage> {
 
                     setState(() {});
                     // call method to fetch products in the selected category
-                    if ( category.id == "0") {
+                    if ( category.id == 0) {
                       productsViewModel.fetchProducts();
                     } else {
                       productsViewModel.fetchProducts(categoryId: category.id);
@@ -254,6 +270,7 @@ class _MarketplacePageState extends State<MarketplacePage> {
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: GridView.builder(
+              controller: _scrollController,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 crossAxisSpacing: 14,
@@ -265,12 +282,7 @@ class _MarketplacePageState extends State<MarketplacePage> {
                 final product = vm.products[index];
 
                 return ProductCard(
-                  name: product.name,
-                  price: "\$4.50",
-                  unit: "per kg",
-                  tag: "Organic",
-                  image:
-                  "https://lh3.googleusercontent.com/aida-public/AB6AXuAe4jXcYmORZ6fOmzXvIzxQtLorBNliZxWx2yrdyrcJGP3ulsCJtfn_VDvETCdLYZvV-HexbjGubQhPHyLAHbrLv0NolczXsZmv-0jRVYQYhjxjBgPF35W09vPr0a5W_GI9VlSbK2XQf6c_Hu1gyvbjMt9VIxHHOCkTCiLY4Qzqew9EqEpreCekQL-_sWqzQkrRKDGsBjVPDfxcALKR09bdNxRMgAW3IPBcHOk0jfuA8yBiwdM3b_bjKAzkcbRUUE4qKLa39I2WL0g",
+                product: product,
                 );
               }
           ),
@@ -323,19 +335,42 @@ class _MarketplacePageState extends State<MarketplacePage> {
     );
   }
 
+  void _scrollListener() {
+    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent) {
+      // You have reached the bottom of the list
+      // Implement your logic here (e.g., fetch more data)
+      print("Reached the bottom!");
+
+      // Check if there are more pages to load
+      _getProductsNextPage();
+    }
+  }
+
+  void _getProductsNextPage() {
+    print("next has called 1 current ${productsViewModel.currentPage} last ${productsViewModel.lastPage}");
+    // Check if there are more pages to load
+    if (productsViewModel.currentPage < productsViewModel.lastPage) {
+      int nextPage = productsViewModel.currentPage + 1;
+      print("next has called 2");
+
+      if (_isAllCatgorySelected) {
+        productsViewModel.fetchProducts(page: nextPage );
+      } else  {
+        productsViewModel.fetchProducts(categoryId: _selectedCategoryId ,page: nextPage);
+      }
+    }
+  }
+
 }
 
 
 class ProductCard extends StatefulWidget {
-  final String name, price, unit, tag, image;
+  final Product product;
 
   const ProductCard({
     super.key,
-    required this.name,
-    required this.price,
-    required this.unit,
-    required this.tag,
-    required this.image,
+    required this.product,
+
   });
 
   @override
@@ -347,7 +382,7 @@ class _ProductCardState extends State<ProductCard> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: (){
-        _navigateToProductDetails();
+        _navigateToProductDetails(product: widget.product);
       },
       child: Container(
         decoration: BoxDecoration(
@@ -366,9 +401,12 @@ class _ProductCardState extends State<ProductCard> {
                   ClipRRect(
                     borderRadius:
                     const BorderRadius.vertical(top: Radius.circular(16)),
-                    child: Image.network(widget.image,
+                    child: Image.network( "https://lh3.googleusercontent.com/aida-public/AB6AXuAe4jXcYmORZ6fOmzXvIzxQtLorBNliZxWx2yrdyrcJGP3ulsCJtfn_VDvETCdLYZvV-HexbjGubQhPHyLAHbrLv0NolczXsZmv-0jRVYQYhjxjBgPF35W09vPr0a5W_GI9VlSbK2XQf6c_Hu1gyvbjMt9VIxHHOCkTCiLY4Qzqew9EqEpreCekQL-_sWqzQkrRKDGsBjVPDfxcALKR09bdNxRMgAW3IPBcHOk0jfuA8yBiwdM3b_bjKAzkcbRUUE4qKLa39I2WL0g",
+
+
                         width: double.infinity, fit: BoxFit.cover),
                   ),
+
                   Positioned(
                     top: 8,
                     left: 8,
@@ -379,7 +417,7 @@ class _ProductCardState extends State<ProductCard> {
                         color: AppColors.accent.withValues(alpha: .9),
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: Text(widget.tag,
+                      child: Text(widget.product.category ?? "",
                           style: const TextStyle(
                               fontSize: 10,
                               color: Colors.white,
@@ -394,18 +432,18 @@ class _ProductCardState extends State<ProductCard> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(widget.name,
+                  Text(widget.product.name,
                       style: const TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 14)),
                   const SizedBox(height: 4),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(widget.price,
+                      Text(widget.product.price.toString(),
                           style: TextStyle(
                               color: AppColors.accent,
                               fontWeight: FontWeight.bold)),
-                      Text(widget.unit,
+                      Text( "per ${widget.product.unit}",
                           style: const TextStyle(
                               fontSize: 10, color: Color(0xFF618961)))
                     ],
@@ -432,11 +470,11 @@ class _ProductCardState extends State<ProductCard> {
     );
   }
 
-  _navigateToProductDetails() {
+  _navigateToProductDetails({required Product product}) {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => const ProductDetailsPage()));
+            builder: (context) => ProductDetailsPage(product: product,)));
   }
 }
 

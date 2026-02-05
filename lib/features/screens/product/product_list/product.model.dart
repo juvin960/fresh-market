@@ -9,7 +9,7 @@ class Product {
   final String? category;
   final String? imageUrl;
   final String? description;
- // final bool isFreshProduce;
+ final bool isFreshProduce;
 
   Product({
     required this.id,
@@ -19,7 +19,7 @@ class Product {
     this.category,
     this.imageUrl,
     this.description,
-
+    this.isFreshProduce = false,
   });
 
   factory Product.fromJson(Map<String, dynamic> json) {
@@ -31,7 +31,24 @@ class Product {
       category: json['category']["name"] ?? '',
       imageUrl: json['image_url'],
       description: json['description'] ?? "",
-      //isFreshProduce: json['is_fresh_produce'] ?? false,
+      isFreshProduce: json['is_fresh_produce'] ?? false,
+    );
+  }
+}
+
+class PageInfo {
+  final int currentPage;
+  final int lastPage;
+
+  PageInfo({
+    required this.currentPage,
+    required this.lastPage,
+  });
+
+  factory PageInfo.fromJson(Map<String, dynamic> json) {
+    return PageInfo(
+      currentPage: json["current_page"] ?? 1,
+      lastPage: json['last_page'] ?? 1,
     );
   }
 }
@@ -41,17 +58,38 @@ class ProductModel {
 
   ProductModel(this._client);
 
-  Future<List<Product>> getAllProducts({String? categoryId}) async {
+  Future<Map<String, dynamic>> getAllProducts({int? categoryId, int page=1}) async {
+    Map<String, String> queryParams = {
+      "page": page.toString(),
+      "per_page": "4",
+    };
+
+    if (categoryId != null) {
+      queryParams['category_id'] = categoryId.toString();
+    }
     final Map<String, dynamic> response = await _client.get(
       Endpoints.getAllProducts,
-      queryParams: categoryId != null ? {'category_id': categoryId} : null,
+      queryParams: queryParams,
     );
 
     final List<dynamic> rawList =
         (response['data']?['data'] ?? []) as List<dynamic>;
 
-    return rawList.map((e) {
+    List<Product> products = rawList.map((e) {
       return Product.fromJson(Map<String, dynamic>.from(e));
     }).toList();
+    // Map<String, dynamic> pageInfoMap = {};
+
+    PageInfo pageInfo = PageInfo(
+        currentPage: response['data']?['current_page'] ?? 1,
+        lastPage: response['data']?['last_page'] ?? 1
+    );
+
+
+    return {
+      "products": products,
+      "pageInfo": pageInfo,
+    };
+
   }
 }

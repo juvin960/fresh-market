@@ -3,7 +3,7 @@ import '../../../services/api_client.dart';
 import '../../../services/end_points.dart';
 
 class Category{
-  final String id;
+  final int id;
   final String name;
   bool isSelected;
 
@@ -15,7 +15,7 @@ class Category{
   });
 
   factory Category.fromJson(Map<String, dynamic> json) {
-    final id = (json['id'] ?? json['_id'] ?? '').toString();
+    final id = json['_id'] ?? 0;
     final name = (json['name'] ?? json['title'] ?? '').toString();
     return Category(id: id, name: name);
   }

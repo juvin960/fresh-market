@@ -335,11 +335,11 @@ class _FreshMarketHomeState extends State<FreshMarketHome> {
   Widget _productCard(String name, String price, String image) {
     return InkWell(
       onTap: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => const ProductDetailsPage()));
-      },
+      //   Navigator.push(
+      //       context,
+      //       MaterialPageRoute(
+      //           builder: (context) => const ProductDetailsPage()));
+       },
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         child: Column(

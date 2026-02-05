@@ -23,7 +23,7 @@ class ProductCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
-          boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 12)],
+          boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 12)],
         ),
         child: Column(
           children: [
@@ -88,6 +88,6 @@ class ProductCard extends StatelessWidget {
   }
 
   void _navigateToProductDetails(BuildContext context) {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => const ProductDetailsPage()));
+    // Navigator.push(context, MaterialPageRoute(builder: (context) => const ProductDetailsPage()));
   }
 }

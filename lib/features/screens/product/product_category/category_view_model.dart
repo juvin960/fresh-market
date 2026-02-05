@@ -31,7 +31,7 @@ class CategoryViewModel extends ChangeNotifier {
       debugPrint('Fetching categories...');
 
       categories = await _model.getAllCategories();
-      Category allCategory = Category(id: "0", name: "All", isSelected: true);
+      Category allCategory = Category(id: 0, name: "All", isSelected: true);
       categories.insert(0, allCategory);
 
       debugPrint('Fetched ${category.length} categories');

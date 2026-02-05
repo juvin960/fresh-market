@@ -8,20 +8,30 @@ class ProductViewModel extends ChangeNotifier {
 
   List<Product> _allProducts = [];
   List<Product> products = [];
+  int _currentPage = 1;
+  int get currentPage => _currentPage;
+  int _lastPage = 1;
+  int get lastPage => _lastPage;
+
+
   List<String> categories = [];
   bool isLoading = false;
   String? errorMessage;
 
 
-  Future<void> fetchProducts({String? categoryId}) async {
+
+  Future<void> fetchProducts({int? categoryId, int page = 1}) async {
     try {
       isLoading = true;
       notifyListeners();
 
-      final data = await _model.getAllProducts(categoryId: categoryId);
+      final data = await _model.getAllProducts(categoryId: categoryId, page: page);
 
-      _allProducts = data;
-      products = List.from(_allProducts);
+      _allProducts = data["products"] as List<Product>;
+      products.addAll(_allProducts);
+      PageInfo pageInfo = data["pageInfo"] as PageInfo;
+      _currentPage = pageInfo.currentPage;
+      _lastPage =  pageInfo.lastPage;
 
       isLoading = false;
       notifyListeners();

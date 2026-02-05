@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:fresh_market_app/features/screens/cart/shopping_cart_page.dart';
+import 'package:fresh_market_app/features/screens/product/product_list/product.model.dart';
 
 class ProductDetailsPage extends StatefulWidget {
-  const ProductDetailsPage({super.key});
+  const ProductDetailsPage({super.key, required this.product});
+
+   final Product product;
+
 
   @override
   State<ProductDetailsPage> createState() => _ProductDetailsPageState();
@@ -95,11 +99,11 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
         alignment: Alignment.topRight,
         child: Chip(
           avatar: const Icon(Icons.verified, color: Colors.green, size: 18),
-          label: const Text(
-            "Fresh Choice",
+          label:  Text(
+            widget.product.category ?? "",
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
-          backgroundColor: Colors.white.withOpacity(0.9),
+          backgroundColor: Colors.white.withValues(alpha: 0.9),
         ),
       ),
     );
@@ -114,9 +118,9 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
+              children:  [
                 Text(
-                  "Organic Hass Avocados",
+                  widget.product.name,
                   style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 4),
@@ -129,13 +133,13 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
-            children: const [
+            children:  [
               Text(
-                "\$4.50",
+                "KES ${widget.product.price.toString()}",
                 style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
               ),
               Text(
-                "per kg",
+                "per ${widget.product.unit ?? ""}",
                 style: TextStyle(fontSize: 12, color: Colors.grey),
               ),
             ],
@@ -226,7 +230,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
               Column(
                 children: [
                   Text(
-                    "${quantityKg.toStringAsFixed(1)} kg",
+                    "${quantityKg.toStringAsFixed(1)} ${widget.product.unit ?? ""}",
                     style: const TextStyle(
                         fontSize: 20, fontWeight: FontWeight.bold),
                   ),
@@ -262,19 +266,19 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
   }
 
   Widget _buildDescription() {
-    return const Padding(
-      padding: EdgeInsets.all(16),
+    return Padding(
+      padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
+          const Text(
             "Description",
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           Text(
-            "Our organic Hass avocados are hand-picked at peak maturity to ensure a buttery texture and rich, nutty flavor. Perfect for guacamole, toast, or fresh salads.",
-            style: TextStyle(color: Colors.grey),
+            widget.product.description ?? "",
+            style: const TextStyle(color: Colors.grey),
           ),
         ],
       ),
