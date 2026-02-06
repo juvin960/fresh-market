@@ -16,6 +16,8 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
   double quantityKg = 2.0;
 
 
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -329,6 +331,9 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
             Expanded(
               child: ElevatedButton.icon(
                 onPressed: () {
+
+
+
                   Navigator.push(
                       context,
                       MaterialPageRoute(

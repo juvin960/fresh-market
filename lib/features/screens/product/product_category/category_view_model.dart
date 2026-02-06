@@ -43,5 +43,9 @@ class CategoryViewModel extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  bool isCategoryListEmpty() {
+    return categories.isEmpty;
+  }
 }
 

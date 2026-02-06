@@ -62,5 +62,17 @@ class ProductViewModel extends ChangeNotifier {
         .toList();
     notifyListeners();
   }
+
+  bool isProductListEmpty() {
+    return products.isEmpty;
+  }
+
+  void clearProducts() {
+    _allProducts.clear();
+    products.clear();
+    _currentPage = 1;
+    _lastPage = 1;
+    notifyListeners();
+  }
 }
 

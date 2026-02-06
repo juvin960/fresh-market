@@ -18,17 +18,25 @@ class _MarketplacePageState extends State<MarketplacePage> {
   final ScrollController _scrollController = ScrollController();
   late ProductViewModel productsViewModel;
   int _selectedCategoryId = 0;
-  bool _isAllCatgorySelected = true;
+  bool _isAllCategorySelected = true;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final vm = Provider.of<CategoryViewModel>(context, listen: false);
-      vm.fetchCategory();
+
+      if (vm.isCategoryListEmpty()) {
+        vm.fetchCategory();
+      }
+
       productsViewModel = Provider.of<ProductViewModel>(context, listen: false);
-      productsViewModel.fetchProducts();
+
+      if (productsViewModel.isProductListEmpty()) {
+        productsViewModel.fetchProducts();
+      }
     });
+    print('MarketplacePage initialized');
     _scrollController.addListener(_scrollListener);
 
   }
@@ -54,7 +62,7 @@ class _MarketplacePageState extends State<MarketplacePage> {
 
   Widget _body() {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 110),
+      padding: const EdgeInsets.only(bottom: 50),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -66,6 +74,11 @@ class _MarketplacePageState extends State<MarketplacePage> {
 
           Expanded(
             child: _productGrid(),
+          ),
+          LinearProgressIndicator(
+            value: Provider.of<ProductViewModel>(context).isLoading ? null : 0,
+            backgroundColor: Colors.transparent,
+            color: AppColors.accent,
           ),
         ],
       ),
@@ -169,31 +182,36 @@ class _MarketplacePageState extends State<MarketplacePage> {
             itemCount: vm.categories.length,
             itemBuilder: (context, index) {
               final category = vm.categories[index];
-              return GestureDetector(
-                  onTap: () {
-                    category.isSelected = true;
-                    _selectedCategoryId =  category.id;
-
-                    category.id == 0 ? _isAllCatgorySelected = true :  _isAllCatgorySelected = false;
-
-                    for (var cat in vm.categories) {
-                      if (cat.id != category.id) {
-                        cat.isSelected = false;
+              productsViewModel = Provider.of<ProductViewModel>(context);
+              return AbsorbPointer(
+                absorbing: productsViewModel.isLoading,
+                child: GestureDetector(
+                    onTap: () {
+                      productsViewModel.clearProducts();
+                      category.isSelected = true;
+                      _selectedCategoryId =  category.id;
+                
+                      category.id == 0 ? _isAllCategorySelected = true :  _isAllCategorySelected = false;
+                
+                      for (var cat in vm.categories) {
+                        if (cat.id != category.id) {
+                          cat.isSelected = false;
+                        }
                       }
-                    }
-
-                    setState(() {});
-                    // call method to fetch products in the selected category
-                    if ( category.id == 0) {
-                      productsViewModel.fetchProducts();
-                    } else {
-                      productsViewModel.fetchProducts(categoryId: category.id);
-                    }
-
-
-
-                  },
-                  child: _chip(category: category)
+                
+                      setState(() {});
+                      // call method to fetch products in the selected category
+                      if ( category.id == 0) {
+                        productsViewModel.fetchProducts();
+                      } else {
+                        productsViewModel.fetchProducts(categoryId: category.id);
+                      }
+                
+                
+                
+                    },
+                    child: _chip(category: category)
+                ),
               );
             },
           ),
@@ -253,19 +271,19 @@ class _MarketplacePageState extends State<MarketplacePage> {
   Widget _productGrid() {
     return Consumer<ProductViewModel>(
       builder: (context, vm, _) {
-        if (vm.isLoading) {
-          return const SizedBox(
-            height: 60,
-            child: Center(child: CircularProgressIndicator()),
-          );
-        }
-
-        if (vm.errorMessage != null) {
-          return SizedBox(
-            height: 60,
-            child: Center(child: Text(vm.errorMessage!)),
-          );
-        }
+        // if (vm.isLoading) {
+        //   return const SizedBox(
+        //     height: 60,
+        //     child: Center(child: CircularProgressIndicator()),
+        //   );
+        // }
+        //
+        // if (vm.errorMessage != null) {
+        //   return SizedBox(
+        //     height: 60,
+        //     child: Center(child: Text(vm.errorMessage!)),
+        //   );
+        // }
 
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -353,7 +371,7 @@ class _MarketplacePageState extends State<MarketplacePage> {
       int nextPage = productsViewModel.currentPage + 1;
       print("next has called 2");
 
-      if (_isAllCatgorySelected) {
+      if (_isAllCategorySelected) {
         productsViewModel.fetchProducts(page: nextPage );
       } else  {
         productsViewModel.fetchProducts(categoryId: _selectedCategoryId ,page: nextPage);
