@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:fresh_market_app/features/screens/cart/cart_model.dart';
+import 'package:provider/provider.dart';
+
+import 'cart_view_model.dart';
 
 class CartCheckoutPage extends StatefulWidget {
   const CartCheckoutPage({super.key});
@@ -10,7 +14,18 @@ class CartCheckoutPage extends StatefulWidget {
 class _CartCheckoutPageState extends State<CartCheckoutPage> {
   int kaleQty = 1;
   int avocadoQty = 3;
-  String region = "Downtown Metro Area";
+  String? region;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final vm = Provider.of<CartViewModel>(context, listen: false);
+        vm.getAllRegions();
+        vm.fetchCartItems();
+      });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -195,26 +210,30 @@ class _CartCheckoutPageState extends State<CartCheckoutPage> {
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         children: [
-          DropdownButtonFormField<String>(
-            value: region,
-            items: const [
-              DropdownMenuItem(
-                  value: "Downtown Metro Area",
-                  child: Text("Downtown Metro Area")),
-              DropdownMenuItem(
-                  value: "Northern Suburbs",
-                  child: Text("Northern Suburbs")),
-              DropdownMenuItem(
-                  value: "East Harbor District",
-                  child: Text("East Harbor District")),
-            ],
-            onChanged: (val) => setState(() => region = val!),
-            decoration: InputDecoration(
-              labelText: "Delivery Region",
-              border:
-              OutlineInputBorder(borderRadius: BorderRadius.circular(16)),
-            ),
+          Consumer<CartViewModel>(
+            builder: (context, vm, _) {
+              if (vm.isLoading) return const LinearProgressIndicator();
+
+              return DropdownButtonFormField<Region>(
+                value: vm.selectedRegion,
+                items: vm.regions.map((r) {
+                  return DropdownMenuItem<Region>(
+                    value: r,
+                    child: Text(r.name),
+                  );
+                }).toList(),
+                onChanged: vm.setSelectedRegion,
+                decoration: InputDecoration(
+                  labelText: "Delivery Region",
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                ),
+              );
+            },
           ),
+
+
           const SizedBox(height: 12),
           TextField(
             maxLines: 2,
@@ -287,12 +306,18 @@ class _CartCheckoutPageState extends State<CartCheckoutPage> {
       padding: const EdgeInsets.all(16),
       color: const Color(0xFFF6F8F6),
       child: Column(
-        children: const [
-          _summaryRow("Subtotal", "\$10.50"),
-          _summaryRow("Delivery Fee", "\$2.50"),
-          _summaryRow("Discount", "-\$0.00", highlight: true),
-          Divider(),
-          _summaryRow("Total Amount", "\$13.00", big: true),
+        children: [
+          // Consumer<CartViewModel>(
+          //   builder: (context, vm _){
+          //     if
+          // )
+
+
+          // _summaryRow("Subtotal", "\$10.50"),
+          // _summaryRow("Delivery Fee", "\$2.50"),
+          // _summaryRow("Discount", "-\$0.00", highlight: true),
+          // Divider(),
+          // _summaryRow("Total Amount", "\$13.00", big: true),
         ],
       ),
     );

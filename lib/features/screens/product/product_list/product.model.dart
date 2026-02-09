@@ -2,7 +2,8 @@ import '../../../services/api_client.dart';
 import '../../../services/end_points.dart';
 
 class Product {
-  final String id;
+  final int id;
+  final int unitId;
   final String name;
   final double price;
   final String? unit;
@@ -11,10 +12,11 @@ class Product {
   final String? description;
  final bool isFreshProduce;
 
-  Product({
+  Product( {
     required this.id,
     required this.name,
     required this.price,
+    required this.unitId,
     this.unit,
     this.category,
     this.imageUrl,
@@ -24,10 +26,11 @@ class Product {
 
   factory Product.fromJson(Map<String, dynamic> json) {
     return Product(
-      id: json['id'].toString(),
+      id: json['id'],
+      unitId: json['unit_type']['id'],
       name: json['name'] ?? '',
       price: double.parse(json['base_price'] ?? "0"),
-      unit: json['unit_type'] ?? 'per unit',
+      unit: json['unit_type']['name'] ?? 'per unit',
       category: json['category']["name"] ?? '',
       imageUrl: json['image_url'],
       description: json['description'] ?? "",

@@ -19,7 +19,7 @@ class ApiClient {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('auth_token');
 
-    debugPrint('Token >>> $token');
+    // debugPrint('Token >>> $token');
 
     return {
       ..._defaultHeaders,
@@ -65,6 +65,7 @@ class ApiClient {
   }
 
   Future<dynamic> post(String endpoint, {Map<String, dynamic>? data}) async {
+    debugPrint('data is $data');
     final response = await client.post(
       Uri.parse('$baseUrl$endpoint'),
       headers: await _getHeaders(),

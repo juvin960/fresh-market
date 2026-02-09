@@ -11,35 +11,80 @@ class CartViewModel extends ChangeNotifier {
   List<Region> _regions = [];
   bool _isLoading = false;
   String? _errorMessage;
-
-
+  Region? selectedRegion;
+  Cart? selectedItem;
+  late double _total;
 
   List<Cart> get items => _cartItems;
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
   List<Region> get regions => _regions;
+  double get total => _total;
 
 
 
-  Future<void> addToCart() async {
+  Future<bool> addSelectedToCart( {
+   required int productId,
+    required int selectedUnitTypeId,
+    required double quantity,
+}) async {
+    debugPrint(' selected item');
+    // if (selectedItem == null) {
+    //
+    //   _errorMessage = 'No item selected';
+    //   return false;
+    // }
+
+    _isLoading = true;
+    _errorMessage = null;
+    notifyListeners();
+
     try {
-      _isLoading = true;
-      _errorMessage = null;
-      notifyListeners();
+      debugPrint('added to cart');
+       await _model.addToCart(
+        productId: productId,
+        selectedUnitTypeId: selectedUnitTypeId,
+        quantity: quantity,
 
-      debugPrint('Adding item to cart...');
+      );
 
-      _cartItems = await _model.addToCart();
-
-      debugPrint('Added ${_cartItems.length} items to cart');
+      debugPrint('Added to cart:');
+      return true;
     } catch (e) {
-      _errorMessage = 'Failed to add item to cart';
-      debugPrint('Error adding item to cart: $e');
+      _errorMessage = 'Failed to add item';
+      debugPrint('Error adding to cart: $e');
+      return false;
     } finally {
       _isLoading = false;
       notifyListeners();
     }
   }
+
+  Future<void> fetchCartItems() async {
+    try {
+      _isLoading = true;
+      _errorMessage = null;
+      notifyListeners();
+
+      debugPrint('Fetching cart items...');
+
+      final Map<String, dynamic> response = await _model.getCartItems();
+      _cartItems = response['cartItems'];
+      _total = response['total'];
+
+      debugPrint('Fetched ${_cartItems.length} cart items');
+    } catch (e) {
+      _errorMessage = 'Failed to load cart items';
+      debugPrint('Error fetching cart items: $e');
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+
+
+
 
   Future<void> getAllRegions() async {
     try {
@@ -50,6 +95,9 @@ class CartViewModel extends ChangeNotifier {
       debugPrint('Fetching regions...');
 
       _regions = await _model.getAllRegions();
+      if (regions.isNotEmpty) {
+        selectedRegion = regions.first;
+      }
 
       debugPrint('Fetched ${_regions.length} cart items');
     } catch (e) {
@@ -60,6 +108,9 @@ class CartViewModel extends ChangeNotifier {
       notifyListeners();
     }
   }
-
+  void setSelectedRegion(Region? region) {
+    selectedRegion = region;
+    notifyListeners();
+  }
 
 }

@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:fresh_market_app/features/screens/cart/shopping_cart_page.dart';
 import 'package:fresh_market_app/features/screens/product/product_list/product.model.dart';
+import 'package:http/http.dart';
+import 'package:provider/provider.dart';
+
+import '../../cart/cart_model.dart';
+import '../../cart/cart_view_model.dart';
 
 class ProductDetailsPage extends StatefulWidget {
   const ProductDetailsPage({super.key, required this.product});
@@ -14,6 +19,15 @@ class ProductDetailsPage extends StatefulWidget {
 
 class _ProductDetailsPageState extends State<ProductDetailsPage> {
   double quantityKg = 2.0;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final vm = Provider.of<CartViewModel>(context, listen: false);
+      vm.getAllRegions();
+    });
+  }
 
 
 
@@ -330,14 +344,43 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
             const SizedBox(width: 16),
             Expanded(
               child: ElevatedButton.icon(
-                onPressed: () {
+                onPressed: () async {
+                  final vm = context.read<CartViewModel>();
 
+                  // vm.selectedItem = Cart(
+                  //   productId: widget.product.id,
+                  //   name: widget.product.name,
+                  //   price: widget.product.price,
+                  //   quantity: quantityKg.toInt(),
+                  // );
+                  debugPrint('add to cart call');
 
-
-                  Navigator.push(
+                  bool isSuccess = await vm.addSelectedToCart(
+                    productId: widget.product.id,
+                    selectedUnitTypeId: widget.product.unitId ,
+                    quantity: quantityKg,
+                  );
+                   if (! mounted) return;
+                  if(isSuccess) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Added to cart!')),
+                    );
+                    Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const CartCheckoutPage()));
+                        builder: (context) => const CartCheckoutPage(),
+                      ),
+                    );
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(vm.errorMessage ?? 'Failed to add to cart')),
+                    );
+                    return;
+                  }
+
+
+
+
                 },
                 icon: const Icon(Icons.shopping_basket),
                 label: const Text(
@@ -353,6 +396,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                   ),
                 ),
               ),
+
             ),
           ],
         ),
