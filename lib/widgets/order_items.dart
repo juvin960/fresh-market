@@ -94,63 +94,35 @@ class TimelineStep extends StatelessWidget {
 }
 
 
-class OrderItem extends StatelessWidget {
-  final String imageUrl;
-  final String name;
-  final String price;
-  final String batch;
-  final String details;
+class SummaryRow extends StatelessWidget {
+  final String label;
+  final String value;
+  final bool highlight;
+  final bool big;
 
-  const OrderItem({
-    super.key,
-    required this.imageUrl,
-    required this.name,
-    required this.price,
-    required this.batch,
-    required this.details,
-  });
+  const SummaryRow(this.label, this.value,
+      {super.key, this.highlight = false, this.big = false});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Container(
-            width: 80,
-            height: 80,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
-                color: Colors.grey[200],
-                image: DecorationImage(
-                    image: NetworkImage(imageUrl), fit: BoxFit.cover)),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(name,
-                        style: const TextStyle(fontWeight: FontWeight.bold)),
-                    Text(price,
-                        style: const TextStyle(fontWeight: FontWeight.bold)),
-                  ],
-                ),
-                const SizedBox(height: 4),
-                Text(batch,
-                    style: TextStyle(
-                        fontSize: 10, color: Colors.grey[600], fontFamily: 'PlusJakartaSans')),
-                const SizedBox(height: 4),
-                Text(details,
-                    style: TextStyle(fontSize: 12, color: Colors.grey[600])),
-              ],
-            ),
-          ),
+          Text(label,
+              style: TextStyle(
+                  fontSize: big ? 16 : 14,
+                  fontWeight: big ? FontWeight.bold : FontWeight.normal,
+                  color: highlight ? Colors.green : Colors.grey)),
+          Text(value,
+              style: TextStyle(
+                  fontSize: big ? 20 : 14,
+                  fontWeight: FontWeight.bold,
+                  color: highlight ? Colors.green : Colors.black)),
         ],
       ),
     );
   }
+
 }

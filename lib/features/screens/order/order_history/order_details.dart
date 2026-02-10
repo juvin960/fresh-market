@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../widgets/order_items.dart';
-
-
+import '../../cart/cart_model.dart';
+import '../../cart/cart_view_model.dart';
 
 class OrderDetailsPage extends StatefulWidget {
   const OrderDetailsPage({super.key});
+
+
 
   @override
   State<OrderDetailsPage> createState() => _OrderDetailsPageState();
@@ -24,7 +27,7 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                 padding:
                 const EdgeInsets.only(top: 40, left: 16, right: 16, bottom: 12),
                 decoration: BoxDecoration(
-                  color: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.9),
+                  color: Theme.of(context).scaffoldBackgroundColor.withValues(alpha: 0.9),
                   border: Border(
                     bottom: BorderSide(
                         color: Theme.of(context).dividerColor, width: 1),
@@ -156,7 +159,7 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: const [
                           Text(
-                            "Items (2)",
+                            "Items ",
                             style: TextStyle(
                                 fontSize: 16, fontWeight: FontWeight.bold),
                           ),
@@ -169,79 +172,115 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                     ),
 
                     const SizedBox(height: 8),
+                    Consumer<CartViewModel>(
+                      builder: (context, vm, _) {
+                        if (vm.isLoading) {
+                          return const Padding(
+                            padding: EdgeInsets.all(24),
+                            child: Center(child: CircularProgressIndicator()),
+                          );
+                        }
 
-                    const OrderItem(
-                      imageUrl:
-                      "https://lh3.googleusercontent.com/aida-public/AB6AXuCfbG8SDs3hzoFeFBv5hYHK92y6kcE2BxcdBunhWyqGvzoStvpn5Yv2sLmh-ZnqWzE3pM6_NyUIBnz8GWtfMqfkiWU_IDQI0IOkTKeL59P21ZEf28r_E-BL2ol1zmZvDhQ3-AN61d1RT3D3JqhaZ6nwI5DAqLOTYsI3XHusH5MobPJJoKniPQxPRZYZp7aDHrX9w8bJUuIZddADzBruyNRqdTSRRuevY4LvunXEHeOwT_lEjtMRqfgEdznBHT7qDIO7_mdLKOLeQ_g",
-                      name: "Fuji Apples",
-                      price: "\$6.00",
-                      batch: "Batch #B-992",
-                      details: "2kg @ \$3.00/kg",
+                        if (vm.cartItems.isEmpty) {
+                          return const Padding(
+                            padding: EdgeInsets.all(24),
+                            child: Center(child: Text(" No order available")),
+                          );
+                        }
+
+                        return Column(
+                          children: vm.cartItems.map((item) {
+                            return _orderItems(
+                              item: item,
+
+                            );
+                          }).toList(),
+                        );
+                      },
                     ),
-                    const Divider(),
-                    const OrderItem(
-                      imageUrl:
-                      "https://lh3.googleusercontent.com/aida-public/AB6AXuDxFxhu9ZO0bYuMiDnbc6fRJ31gizJS-3fqMBF_gDHtqrMD466MFD7kc8eoAzH24C5jL5Wu3nAzl8Y6Vaabenl6qY2z9qWWIDXzyEXoS2Qzn9juT0HvVglIIi9pAo18cJo-_NRnx8oIJRzl0HD-VdLZyC-JduTpamqoXWY7i3bHr1-VJrevZ9MArYGv008tnlNrK3XgG2Fl9mMo_spYOhf1ASBiqH6LFFzU8UdK8dE8zIRs3qU-p_2Px2o7ipWEgZid-JWC8oRnia8",
-                      name: "Spinach Bunch",
-                      price: "\$1.50",
-                      batch: "Batch #S-101",
-                      details: "1 count @ \$1.50",
-                    ),
+                    // const OrderItem(
+                    //   imageUrl:
+                    //   "https://lh3.googleusercontent.com/aida-public/AB6AXuCfbG8SDs3hzoFeFBv5hYHK92y6kcE2BxcdBunhWyqGvzoStvpn5Yv2sLmh-ZnqWzE3pM6_NyUIBnz8GWtfMqfkiWU_IDQI0IOkTKeL59P21ZEf28r_E-BL2ol1zmZvDhQ3-AN61d1RT3D3JqhaZ6nwI5DAqLOTYsI3XHusH5MobPJJoKniPQxPRZYZp7aDHrX9w8bJUuIZddADzBruyNRqdTSRRuevY4LvunXEHeOwT_lEjtMRqfgEdznBHT7qDIO7_mdLKOLeQ_g",
+                    //   name: "Fuji Apples",
+                    //   price: "\$6.00",
+                    //   batch: "Batch #B-992",
+                    //   details: "2kg @ \$3.00/kg",
+                    // ),
+                    // const Divider(),
+                    // const OrderItem(
+                    //   imageUrl:
+                    //   "https://lh3.googleusercontent.com/aida-public/AB6AXuDxFxhu9ZO0bYuMiDnbc6fRJ31gizJS-3fqMBF_gDHtqrMD466MFD7kc8eoAzH24C5jL5Wu3nAzl8Y6Vaabenl6qY2z9qWWIDXzyEXoS2Qzn9juT0HvVglIIi9pAo18cJo-_NRnx8oIJRzl0HD-VdLZyC-JduTpamqoXWY7i3bHr1-VJrevZ9MArYGv008tnlNrK3XgG2Fl9mMo_spYOhf1ASBiqH6LFFzU8UdK8dE8zIRs3qU-p_2Px2o7ipWEgZid-JWC8oRnia8",
+                    //   name: "Spinach Bunch",
+                    //   price: "\$1.50",
+                    //   batch: "Batch #S-101",
+                    //   details: "1 count @ \$1.50",
+                    // ),
 
                     const SizedBox(height: 16),
 
                     // Cost Breakdown
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Container(
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).cardColor,
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: const [
-                                Text("Subtotal"),
-                                Text("\$7.50"),
-                              ],
+                      child: Consumer<CartViewModel>(
+                        builder: ( context, vm, _) {
+                          return Container(
+                            padding: const EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                              color: Theme
+                                  .of(context)
+                                  .cardColor,
+                              borderRadius: BorderRadius.circular(16),
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: const [
-                                Text("Delivery Fee"),
-                                Text("\$2.00"),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: const [
-                                Text("Tax"),
-                                Text("\$0.00"),
-                              ],
-                            ),
-                            const Divider(),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: const [
-                                Text(
-                                  "Total",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold, fontSize: 16),
+                            child: Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment
+                                      .spaceBetween,
+                                  children:  [
+                                    Text("Subtotal"),
+                                    Text("KES ${vm.total.toStringAsFixed(2)}"),
+                                  ],
                                 ),
-                                Text(
-                                  "\$9.50",
-                                  style: TextStyle(
-                                      color: Colors.green,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment
+                                      .spaceBetween,
+                                  children: const [
+                                    Text("Delivery Fee"),
+                                    Text("\$2.00"),
+                                  ],
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment
+                                      .spaceBetween,
+                                  children: const [
+                                    Text("Tax"),
+                                    Text("\$0.00"),
+                                  ],
+                                ),
+                                const Divider(),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment
+                                      .spaceBetween,
+                                  children: [
+                                    Text(
+                                      "Total",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16),
+                                    ),
+                                    Text(
+                                      "KES ${vm.total.toStringAsFixed(2)}",
+                                      style: TextStyle(
+                                          color: Colors.green,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
-                          ],
-                        ),
+                          );
+                        }
                       ),
                     ),
 
@@ -310,6 +349,55 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
               ),
             ),
           )
+        ],
+      ),
+    );
+  }
+  Widget _orderItems({
+    required Cart item,
+
+  }) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      child: Row(
+        children: [
+          Container(
+            height: 64,
+            width: 64,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color: Colors.grey.shade200, // placeholder image
+            ),
+            child: const Icon(Icons.shopping_bag),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  item.name,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
+                Text(
+                  item.unitTypeName,
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: Colors.green,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  "\$${item.price.toStringAsFixed(2)} / ${item.unitTypeName}",
+                  style: const TextStyle(color: Colors.grey),
+                ),
+              ],
+            ),
+          ),
+
         ],
       ),
     );

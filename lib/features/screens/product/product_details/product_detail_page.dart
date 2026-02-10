@@ -347,12 +347,6 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                 onPressed: () async {
                   final vm = context.read<CartViewModel>();
 
-                  // vm.selectedItem = Cart(
-                  //   productId: widget.product.id,
-                  //   name: widget.product.name,
-                  //   price: widget.product.price,
-                  //   quantity: quantityKg.toInt(),
-                  // );
                   debugPrint('add to cart call');
 
                   bool isSuccess = await vm.addSelectedToCart(
@@ -365,12 +359,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Added to cart!')),
                     );
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const CartCheckoutPage(),
-                      ),
-                    );
+
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text(vm.errorMessage ?? 'Failed to add to cart')),

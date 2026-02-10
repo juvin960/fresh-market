@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fresh_market_app/features/screens/cart/cart_model.dart';
+import 'package:fresh_market_app/features/screens/order/order_history/order_details.dart';
 import 'package:provider/provider.dart';
 
 import 'cart_view_model.dart';
@@ -352,7 +353,14 @@ class _CartCheckoutPageState extends State<CartCheckoutPage> {
         width: double.infinity,
         height: 56,
         child: ElevatedButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const OrderDetailsPage(),
+              ),
+            );
+          },
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.green,
             shape:

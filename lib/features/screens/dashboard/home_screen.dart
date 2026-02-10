@@ -208,10 +208,10 @@ class _FreshMarketHomeState extends State<FreshMarketHome> {
           const SizedBox(height: 10),
           InkWell(
             onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const OrderDetailsPage()));
+              // Navigator.push(
+              //     context,
+              //     MaterialPageRoute(
+              //         builder: (context) => const OrderDetailsPage()));
             },
             child: Card(
               shape:

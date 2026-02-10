@@ -12,6 +12,7 @@ import '../product_details/product_detail_page.dart';
 class MarketplacePage extends StatefulWidget {
   const MarketplacePage({super.key});
 
+
   @override
   State<MarketplacePage> createState() => _MarketplacePageState();
 }
@@ -274,19 +275,6 @@ class _MarketplacePageState extends State<MarketplacePage> {
   Widget _productGrid() {
     return Consumer<ProductViewModel>(
       builder: (context, vm, _) {
-        // if (vm.isLoading) {
-        //   return const SizedBox(
-        //     height: 60,
-        //     child: Center(child: CircularProgressIndicator()),
-        //   );
-        // }
-        //
-        // if (vm.errorMessage != null) {
-        //   return SizedBox(
-        //     height: 60,
-        //     child: Center(child: Text(vm.errorMessage!)),
-        //   );
-        // }
 
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -309,49 +297,7 @@ class _MarketplacePageState extends State<MarketplacePage> {
           ),
         );
 
-        // return Padding(
-        //   padding: const EdgeInsets.symmetric(horizontal: 16),
-        //   child: GridView.count(
-        //     crossAxisCount: 2,
-        //     crossAxisSpacing: 14,
-        //     mainAxisSpacing: 14,
-        //     childAspectRatio: .65,
-        //     children: const [
-        //       ProductCard(
-        //         name: "Vine Tomatoes",
-        //         price: "\$4.50",
-        //         unit: "per kg",
-        //         tag: "Organic",
-        //         image:
-        //         "https://lh3.googleusercontent.com/aida-public/AB6AXuAe4jXcYmORZ6fOmzXvIzxQtLorBNliZxWx2yrdyrcJGP3ulsCJtfn_VDvETCdLYZvV-HexbjGubQhPHyLAHbrLv0NolczXsZmv-0jRVYQYhjxjBgPF35W09vPr0a5W_GI9VlSbK2XQf6c_Hu1gyvbjMt9VIxHHOCkTCiLY4Qzqew9EqEpreCekQL-_sWqzQkrRKDGsBjVPDfxcALKR09bdNxRMgAW3IPBcHOk0jfuA8yBiwdM3b_bjKAzkcbRUUE4qKLa39I2WL0g",
-        //       ),
-        //       ProductCard(
-        //         name: "Organic Kale",
-        //         price: "\$3.00",
-        //         unit: "per bunch",
-        //         tag: "Fresh Picked",
-        //         image:
-        //         "https://lh3.googleusercontent.com/aida-public/AB6AXuBs5ApbiEI6cyteQaR8hOaeVhXwAF8ndV5KNgkxuAAQSzyXPXvOEvhedSchd3h6buXTgYbHACO9vBJTM2hTzphiKIQs6apJ2PLpshGhV1diKRwaa2ZUxBzpF2H8CYOlzRtKVwNOimq3HynuciT30V0u2YQaF6X5RZVMn39PIKbHG6Czb6tFVz36cEveZ02LpcXyzXSuQuxxSz7wNNHImooofxU5tXfv6bF6fte24hSizOm1iiE80fgCszlqm49Rdw5bQMWpo0Z2AD0",
-        //       ),
-        //       ProductCard(
-        //         name: "Dutch Carrots",
-        //         price: "\$2.50",
-        //         unit: "per kg",
-        //         tag: "Fresh Picked",
-        //         image:
-        //         "https://lh3.googleusercontent.com/aida-public/AB6AXuC4wRK7dAoW0n6Qqe1h6aDdtlamSHTPtkmZcUuHPt9LKNcqk0qeiiRb9wr9ElKCrG3ra5NwNOg3WYRQK3MjE9AThd0SV-J15LX_dbft_2nOGOMLyXObfVqsy1iDSSB2qhb0x4pcfmQ6tVObo-n5LCZkYvk9h6L7x2gqG9KT6w7W3YmyQakxCgH770m3NpOZHVAkta7E_bCrbBvumLjOm2df6V6MGjXOnMmqmuIHWu7c6aBuy0cVQkOYc70Ak6uKnCEbohppTa7sRl8",
-        //       ),
-        //       ProductCard(
-        //         name: "Spring Onions",
-        //         price: "\$1.50",
-        //         unit: "per bunch",
-        //         tag: "Organic",
-        //         image:
-        //         "https://lh3.googleusercontent.com/aida-public/AB6AXuAjR-xZ63suBp8k_gpkVAiJb83eoHlACh20gMJjRfGE4twNojNTRkhHQGtwuTcxiy21eGPyo7otHjXE_GU36dz5yCNygPQPnNYnZapS-YWACNjHYedobNLteyd3Yj9sxqQwpdB2p78ZI3hbsYgY-ZEyInxzpmX9RmhgSeReHib4-9faSqHO55vBquAjDO86AyR5S-I2bhtaN0vXHm1bbI6dgq1nWZCFXM_yY5QvijVHS8062iZdQsw8gx1Q6aPmN_m-83dbnUqemkI",
-        //       ),
-        //     ],
-        //   ),
-        // );
+
       },
     );
   }
@@ -527,31 +473,3 @@ class _ProductCardState extends State<ProductCard> {
             builder: (context) => ProductDetailsPage(product: product,)));
   }
 }
-
-//
-// class _NavItem extends StatelessWidget {
-//   final IconData icon;
-//   final String label;
-//   final bool active;
-//
-//   const _NavItem(
-//       {required this.icon, required this.label, this.active = false});
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Column(
-//       children: [
-//         Icon(icon, color: active ? AppColors.accent : Colors.grey),
-//         const SizedBox(height: 2),
-//         Text(label,
-//             style: TextStyle(
-//                 fontSize: 10,
-//                 fontWeight:
-//                 active ? FontWeight.bold : FontWeight.normal,
-//                 color: active
-//                     ? AppColors.accent
-//                     : Colors.grey))
-//       ],
-//     );
-//   }
-// }
