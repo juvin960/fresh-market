@@ -12,8 +12,6 @@ class CartCheckoutPage extends StatefulWidget {
 }
 
 class _CartCheckoutPageState extends State<CartCheckoutPage> {
-  int kaleQty = 1;
-  int avocadoQty = 3;
   String? region;
 
   @override
@@ -41,27 +39,32 @@ class _CartCheckoutPageState extends State<CartCheckoutPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _buildItemsHeader(),
-                    _cartItem(
-                      image:
-                      "https://lh3.googleusercontent.com/aida-public/AB6AXuBKJDcOQkOU63zWDUVmphFXW-ohvy5pVblSCepMFsAW-Iu9Gl8QHGH3YToukA0jfz0U5TSLveb6RIEZB3HNGFbK-JtzAwjZIEkmSzk3aPpsdGkuDu1s6vwsD7MfMTdF57_DnrruBfw88hISe_u0gh9tmZ7UGKc-ERPhstdxNSxnE0nEZwMfj6nLoMW_gxLg81eJ77ZMTGA7EXYDlV3bDk_aKRhk1-zSYzkLCy2YeuJ82Veyag_hTEHbJ0aqGu6OuHLjxcWrKH8CWBs",
-                      title: "Organic Kale",
-                      subtitle: "Batch #429 • Harvested Today",
-                      price: "\$4.50 / kg",
-                      qty: kaleQty,
-                      onAdd: () => setState(() => kaleQty++),
-                      onRemove: () =>
-                          setState(() => kaleQty = kaleQty > 1 ? kaleQty - 1 : 1),
-                    ),
-                    _cartItem(
-                      image:
-                      "https://lh3.googleusercontent.com/aida-public/AB6AXuDOaPf-wab3XInOn11naVCfpmnBXQ2T5ss4XkijVc5Qf3NM8uLkBRkEPx_PuxV3w84q9LrVqs-Ldn8Fq9guOvKWdcu1rvpbtjoBUJ5Si3JPFI5QMqnvLlmvc4sDxwxHbq9Z2fto1GDvvQcucawohkHGoVr4z1Mh0mOX7QnEAYmzityfOa8i5NQKOPHx2dma4EeH7a-DDD4X_Uy_yO4mfZDJMBVDXbD4tmT5BS1Dmr0n-5dikLSnQLtZx_6U1O2GrJTi7oCFnk9ejEw",
-                      title: "Hass Avocado",
-                      subtitle: "Batch #102 • Farm Fresh",
-                      price: "\$2.00 / pc",
-                      qty: avocadoQty,
-                      onAdd: () => setState(() => avocadoQty++),
-                      onRemove: () => setState(() =>
-                      avocadoQty = avocadoQty > 1 ? avocadoQty - 1 : 1),
+                    Consumer<CartViewModel>(
+                      builder: (context, vm, _) {
+                        if (vm.isLoading) {
+                          return const Padding(
+                            padding: EdgeInsets.all(24),
+                            child: Center(child: CircularProgressIndicator()),
+                          );
+                        }
+
+                        if (vm.cartItems.isEmpty) {
+                          return const Padding(
+                            padding: EdgeInsets.all(24),
+                            child: Center(child: Text("Your cart is empty")),
+                          );
+                        }
+
+                        return Column(
+                          children: vm.cartItems.map((item) {
+                            return _cartItem(
+                              item: item,
+                              onAdd: () => vm.incrementQuantity(item.id),
+                              onRemove: () => vm.decrementQuantity(item.id),
+                            );
+                          }).toList(),
+                        );
+                      },
                     ),
                     _sectionTitle("Delivery Details"),
                     _deliveryDetails(),
@@ -115,18 +118,14 @@ class _CartCheckoutPageState extends State<CartCheckoutPage> {
     return const Padding(
       padding: EdgeInsets.fromLTRB(16, 24, 16, 8),
       child: Text(
-        "Items (3)",
+        "Items",
         style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
       ),
     );
   }
 
   Widget _cartItem({
-    required String image,
-    required String title,
-    required String subtitle,
-    required String price,
-    required int qty,
+    required Cart item,
     required VoidCallback onAdd,
     required VoidCallback onRemove,
   }) {
@@ -139,25 +138,34 @@ class _CartCheckoutPageState extends State<CartCheckoutPage> {
             width: 64,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
-              image: DecorationImage(
-                image: NetworkImage(image),
-                fit: BoxFit.cover,
-              ),
+              color: Colors.grey.shade200, // placeholder image
             ),
+            child: const Icon(Icons.shopping_bag),
           ),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title,
-                    style: const TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: 16)),
-                Text(subtitle,
-                    style: const TextStyle(
-                        fontSize: 12, color: Colors.green)),
+                Text(
+                  item.name,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
+                Text(
+                  item.unitTypeName,
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: Colors.green,
+                  ),
+                ),
                 const SizedBox(height: 4),
-                Text(price, style: const TextStyle(color: Colors.grey)),
+                Text(
+                  "\$${item.price.toStringAsFixed(2)} / ${item.unitTypeName}",
+                  style: const TextStyle(color: Colors.grey),
+                ),
               ],
             ),
           ),
@@ -167,9 +175,11 @@ class _CartCheckoutPageState extends State<CartCheckoutPage> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
                 child: Text(
-                  "$qty",
+                  "${item.quantity}",
                   style: const TextStyle(
-                      fontSize: 16, fontWeight: FontWeight.bold),
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
               _qtyButton(Icons.add, onAdd, filled: true),
@@ -179,6 +189,7 @@ class _CartCheckoutPageState extends State<CartCheckoutPage> {
       ),
     );
   }
+
 
   Widget _qtyButton(IconData icon, VoidCallback onTap,
       {bool filled = false}) {
@@ -257,7 +268,7 @@ class _CartCheckoutPageState extends State<CartCheckoutPage> {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.green.withOpacity(0.1),
+          color: Colors.green.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(16),
         ),
         child: Column(
@@ -302,24 +313,29 @@ class _CartCheckoutPageState extends State<CartCheckoutPage> {
 
 
   Widget _summarySection() {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      color: const Color(0xFFF6F8F6),
-      child: Column(
-        children: [
-          // Consumer<CartViewModel>(
-          //   builder: (context, vm _){
-          //     if
-          // )
-
-
-          // _summaryRow("Subtotal", "\$10.50"),
-          // _summaryRow("Delivery Fee", "\$2.50"),
-          // _summaryRow("Discount", "-\$0.00", highlight: true),
-          // Divider(),
-          // _summaryRow("Total Amount", "\$13.00", big: true),
-        ],
-      ),
+    return Consumer<CartViewModel>(
+        builder: (context, vm, _) {
+         return Container(
+            padding: const EdgeInsets.all(16),
+            color: const Color(0xFFF6F8F6),
+            child: Column(
+              children: [
+                _SummaryRow(
+                  "Subtotal",
+                  "KES ${vm.total.toStringAsFixed(2)}",
+                ),
+                _SummaryRow("Delivery Fee", "\$2.50"),
+                _SummaryRow("Discount", "-\$0.00", highlight: true),
+                Divider(),
+                _SummaryRow(
+                  "Total Amount",
+                  "KES ${vm.total.toStringAsFixed(2)}",
+                  big: true,
+                ),
+              ],
+            ),
+          );
+        }
     );
   }
 
@@ -360,13 +376,13 @@ class _CartCheckoutPageState extends State<CartCheckoutPage> {
 
 
 
-class _summaryRow extends StatelessWidget {
+class _SummaryRow extends StatelessWidget {
   final String label;
   final String value;
   final bool highlight;
   final bool big;
 
-  const _summaryRow(this.label, this.value,
+  const _SummaryRow(this.label, this.value,
       {this.highlight = false, this.big = false});
 
   @override

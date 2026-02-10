@@ -7,10 +7,10 @@ import '../../services/end_points.dart';
 
 class Cart {
   final int id;
-  final String productId;
+  final int productId;
   final String name;
   final double price;
-  final int quantity;
+  final double quantity;
   final int unitTypeId;
   final String unitTypeName;
 
@@ -29,7 +29,7 @@ class Cart {
 
   });
 
-  double get totalPrice => price * quantity;
+  // double get totalPrice => price * quantity;
 
 
   factory Cart.fromJson(Map<String, dynamic> json) {
@@ -38,7 +38,7 @@ class Cart {
       productId: json['id'],
       name: json['product']['name'],
       price: double.parse(json['unit_price'].toString()),
-      quantity: int.parse(json['selected_quantity']),
+      quantity: double.parse(json['selected_quantity'].toString()),
       unitTypeId: json['selected_unit_type_id'],
       unitTypeName: json['unit_type']['name'],
     );
@@ -82,18 +82,41 @@ class CartModel {
   }
 
   Future<Map<String, dynamic>> getCartItems() async {
-
     final Map<String, dynamic> response =
     await _client.get(Endpoints.getCartItems);
 
     final dynamic raw = response['data'] ?? {};
     var rawList = raw['cart']['items'];
-    double total = raw['total'];
+    double total = double.parse(raw['total'].toString());
 
 
-    List<Cart> cartItems = rawList.map((e) {
-      return Cart.fromJson(Map<String, dynamic>.from(e));
-    }).toList();
+    // var cartItems = rawList.map((e) {
+    //   return Cart.fromJson(Map<String, dynamic>.from(e));
+    // }).toList();
+
+
+    List<Cart> cartItems = [];
+
+    for(var item in rawList) {
+      try {
+        Cart cart = Cart(
+          id: item['id'],
+          productId: item['product_id'],
+          name: item['product']['name'],
+          price: double.parse(item['unit_price'].toString()),
+          quantity: double.parse(item['selected_quantity'].toString()),
+          unitTypeId: item['selected_unit_type_id'],
+          unitTypeName: item['unit_type']['name'],
+        );
+
+        cartItems.add(cart);
+      } catch (e) {
+        debugPrint('Error parsing cart item: $e');
+      }
+
+    }
+
+
 
     return  {
       'cartItems': cartItems,

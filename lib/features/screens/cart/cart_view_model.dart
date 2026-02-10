@@ -13,9 +13,9 @@ class CartViewModel extends ChangeNotifier {
   String? _errorMessage;
   Region? selectedRegion;
   Cart? selectedItem;
-  late double _total;
+  double _total = 0.0;
 
-  List<Cart> get items => _cartItems;
+  List<Cart> get cartItems => _cartItems;
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
   List<Region> get regions => _regions;
@@ -47,8 +47,6 @@ class CartViewModel extends ChangeNotifier {
         quantity: quantity,
 
       );
-
-      debugPrint('Added to cart:');
       return true;
     } catch (e) {
       _errorMessage = 'Failed to add item';
@@ -72,7 +70,8 @@ class CartViewModel extends ChangeNotifier {
       _cartItems = response['cartItems'];
       _total = response['total'];
 
-      debugPrint('Fetched ${_cartItems.length} cart items');
+
+      debugPrint('Fetched ${_cartItems.length} items, total: $_total');
     } catch (e) {
       _errorMessage = 'Failed to load cart items';
       debugPrint('Error fetching cart items: $e');
@@ -99,7 +98,7 @@ class CartViewModel extends ChangeNotifier {
         selectedRegion = regions.first;
       }
 
-      debugPrint('Fetched ${_regions.length} cart items');
+      debugPrint('Fetched ${_regions.length} regions');
     } catch (e) {
       _errorMessage = 'Failed to load regions ';
       debugPrint('Error fetching regions: $e');
@@ -112,5 +111,44 @@ class CartViewModel extends ChangeNotifier {
     selectedRegion = region;
     notifyListeners();
   }
+
+  void incrementQuantity(int cartId) {
+    final index = _cartItems.indexWhere((e) => e.id == cartId);
+    if (index == -1) return;
+
+    final item = _cartItems[index];
+    _cartItems[index] = Cart(
+      id: item.id,
+      productId: item.productId,
+      name: item.name,
+      price: item.price,
+      quantity: item.quantity + 1,
+      unitTypeId: item.unitTypeId,
+      unitTypeName: item.unitTypeName,
+    );
+
+    notifyListeners();
+  }
+
+  void decrementQuantity(int cartId) {
+    final index = _cartItems.indexWhere((e) => e.id == cartId);
+    if (index == -1) return;
+
+    final item = _cartItems[index];
+    if (item.quantity <= 1) return;
+
+    _cartItems[index] = Cart(
+      id: item.id,
+      productId: item.productId,
+      name: item.name,
+      price: item.price,
+      quantity: item.quantity - 1,
+      unitTypeId: item.unitTypeId,
+      unitTypeName: item.unitTypeName,
+    );
+
+    notifyListeners();
+  }
+
 
 }

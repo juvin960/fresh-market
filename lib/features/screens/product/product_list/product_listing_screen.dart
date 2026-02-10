@@ -4,6 +4,8 @@ import 'package:fresh_market_app/features/screens/product/product_list/product.m
 import 'package:fresh_market_app/features/screens/product/product_list/product_view_model.dart';
 import 'package:provider/provider.dart';
 import '../../../core/app_colors.dart';
+import '../../cart/cart_view_model.dart';
+import '../../cart/shopping_cart_page.dart';
 import '../product_category/category_view_model.dart';
 import '../product_details/product_detail_page.dart';
 
@@ -15,6 +17,7 @@ class MarketplacePage extends StatefulWidget {
 }
 
 class _MarketplacePageState extends State<MarketplacePage> {
+
   final ScrollController _scrollController = ScrollController();
   late ProductViewModel productsViewModel;
   int _selectedCategoryId = 0;
@@ -474,7 +477,36 @@ class _ProductCardState extends State<ProductCard> {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10)),
                     ),
-                    onPressed: () {},
+                    onPressed: () async {
+                      final vm = context.read<CartViewModel>();
+
+                      bool isSuccess = await vm.addSelectedToCart(
+                        productId: widget.product.id,
+                        selectedUnitTypeId: widget.product.unitId,
+                        quantity: 2.0,
+
+                      );
+                      if (! mounted) return;
+                      if(isSuccess) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Added to cart!')),
+                        );
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const CartCheckoutPage(),
+                          ),
+                        );
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text(vm.errorMessage ?? 'Failed to add to cart')),
+                        );
+                        return;
+                      }
+
+
+
+                    },
                     icon: const Icon(Icons.add_shopping_cart, size: 16),
                     label: const Text("Add",
                         style: TextStyle(fontWeight: FontWeight.bold)),
