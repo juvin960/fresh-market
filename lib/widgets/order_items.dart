@@ -93,36 +93,3 @@ class TimelineStep extends StatelessWidget {
   }
 }
 
-
-class SummaryRow extends StatelessWidget {
-  final String label;
-  final String value;
-  final bool highlight;
-  final bool big;
-
-  const SummaryRow(this.label, this.value,
-      {super.key, this.highlight = false, this.big = false});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(label,
-              style: TextStyle(
-                  fontSize: big ? 16 : 14,
-                  fontWeight: big ? FontWeight.bold : FontWeight.normal,
-                  color: highlight ? Colors.green : Colors.grey)),
-          Text(value,
-              style: TextStyle(
-                  fontSize: big ? 20 : 14,
-                  fontWeight: FontWeight.bold,
-                  color: highlight ? Colors.green : Colors.black)),
-        ],
-      ),
-    );
-  }
-
-}

@@ -6,9 +6,14 @@ import '../../cart/cart_model.dart';
 import '../../cart/cart_view_model.dart';
 
 class OrderDetailsPage extends StatefulWidget {
-  const OrderDetailsPage({super.key});
+  const OrderDetailsPage({
+    super.key,
+    required this.address,
+    this.region,
+  });
 
-
+  final String address;
+  final Region? region;
 
   @override
   State<OrderDetailsPage> createState() => _OrderDetailsPageState();
@@ -24,33 +29,42 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
             children: [
               // Top App Bar
               Container(
-                padding:
-                const EdgeInsets.only(top: 40, left: 16, right: 16, bottom: 12),
+                padding: const EdgeInsets.only(
+                  top: 40,
+                  left: 16,
+                  right: 16,
+                  bottom: 12,
+                ),
                 decoration: BoxDecoration(
-                  color: Theme.of(context).scaffoldBackgroundColor.withValues(alpha: 0.9),
+                  color: Theme.of(
+                    context,
+                  ).scaffoldBackgroundColor.withValues(alpha: 0.9),
                   border: Border(
                     bottom: BorderSide(
-                        color: Theme.of(context).dividerColor, width: 1),
+                      color: Theme.of(context).dividerColor,
+                      width: 1,
+                    ),
                   ),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    GestureDetector(
-                      onTap: () {},
-                      child: const BackButton(),
-                    ),
+                    GestureDetector(onTap: () {}, child: const BackButton()),
                     const Text(
                       'Order #8829',
                       style: TextStyle(
-                          fontSize: 18, fontWeight: FontWeight.bold),
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     GestureDetector(
                       onTap: () {},
                       child: const Text(
                         'Help',
                         style: TextStyle(
-                            color: Colors.green, fontWeight: FontWeight.bold),
+                          color: Colors.green,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ],
@@ -85,10 +99,7 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                             subtitle: "Est. Arrival: 2:00 PM",
                             active: true,
                           ),
-                          TimelineStep(
-                            title: "Delivered",
-                            subtitle: "",
-                          ),
+                          TimelineStep(title: "Delivered", subtitle: ""),
                         ],
                       ),
                     ),
@@ -104,7 +115,8 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                           color: Theme.of(context).cardColor,
                           borderRadius: BorderRadius.circular(16),
                           border: Border.all(
-                              color: Theme.of(context).dividerColor),
+                            color: Theme.of(context).dividerColor,
+                          ),
                         ),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -120,7 +132,8 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                                       Text(
                                         "Delivery Address",
                                         style: TextStyle(
-                                            fontWeight: FontWeight.bold),
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -136,7 +149,8 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                                 CircleAvatar(
                                   radius: 24,
                                   backgroundImage: NetworkImage(
-                                      'https://lh3.googleusercontent.com/aida-public/AB6AXuBeP_ShvWVjFGJ5WD9Zvr3ZwZvqziOguuFFnTjUW46ro0utQoxxNVeFJxPCrKZFtKwEDEd2x74EDt-kbcL3VTh3bsX8buG7BSPp03ciu0VTASDOe0qaUju2sziywZltj07NV2NEVjumSxuDrVIDR2nWRFDsF6QEv89a21WBY1eKTHQkepQMJ0NRtA_9TTycjU5V8wCe4zdMLQaC8qn70IcLIgCiBGM7tvQnMvmCVR2oK2p-AiHfL1osX_5DI6k9XJPRd8TSHewm9NI'),
+                                    'https://lh3.googleusercontent.com/aida-public/AB6AXuBeP_ShvWVjFGJ5WD9Zvr3ZwZvqziOguuFFnTjUW46ro0utQoxxNVeFJxPCrKZFtKwEDEd2x74EDt-kbcL3VTh3bsX8buG7BSPp03ciu0VTASDOe0qaUju2sziywZltj07NV2NEVjumSxuDrVIDR2nWRFDsF6QEv89a21WBY1eKTHQkepQMJ0NRtA_9TTycjU5V8wCe4zdMLQaC8qn70IcLIgCiBGM7tvQnMvmCVR2oK2p-AiHfL1osX_5DI6k9XJPRd8TSHewm9NI',
+                                  ),
                                 ),
                                 const SizedBox(height: 4),
                                 const Text(
@@ -144,7 +158,7 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                                   style: TextStyle(fontSize: 12),
                                 ),
                               ],
-                            )
+                            ),
                           ],
                         ),
                       ),
@@ -161,7 +175,9 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                           Text(
                             "Items ",
                             style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold),
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                           Chip(
                             label: Text("Verified Fresh"),
@@ -189,15 +205,14 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                         }
 
                         return Column(
-                          children: vm.cartItems.map((item) {
-                            return _orderItems(
-                              item: item,
-
-                            );
-                          }).toList(),
+                          children:
+                              vm.cartItems.map((item) {
+                                return _orderItems(item: item);
+                              }).toList(),
                         );
                       },
                     ),
+
                     // const OrderItem(
                     //   imageUrl:
                     //   "https://lh3.googleusercontent.com/aida-public/AB6AXuCfbG8SDs3hzoFeFBv5hYHK92y6kcE2BxcdBunhWyqGvzoStvpn5Yv2sLmh-ZnqWzE3pM6_NyUIBnz8GWtfMqfkiWU_IDQI0IOkTKeL59P21ZEf28r_E-BL2ol1zmZvDhQ3-AN61d1RT3D3JqhaZ6nwI5DAqLOTYsI3XHusH5MobPJJoKniPQxPRZYZp7aDHrX9w8bJUuIZddADzBruyNRqdTSRRuevY4LvunXEHeOwT_lEjtMRqfgEdznBHT7qDIO7_mdLKOLeQ_g",
@@ -215,72 +230,68 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                     //   batch: "Batch #S-101",
                     //   details: "1 count @ \$1.50",
                     // ),
-
                     const SizedBox(height: 16),
 
                     // Cost Breakdown
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: Consumer<CartViewModel>(
-                        builder: ( context, vm, _) {
+                        builder: (context, vm, _) {
                           return Container(
                             padding: const EdgeInsets.all(16),
                             decoration: BoxDecoration(
-                              color: Theme
-                                  .of(context)
-                                  .cardColor,
+                              color: Theme.of(context).cardColor,
                               borderRadius: BorderRadius.circular(16),
                             ),
                             child: Column(
                               children: [
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment
-                                      .spaceBetween,
-                                  children:  [
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
                                     Text("Subtotal"),
                                     Text("KES ${vm.total.toStringAsFixed(2)}"),
                                   ],
                                 ),
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment
-                                      .spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: const [
                                     Text("Delivery Fee"),
                                     Text("\$2.00"),
                                   ],
                                 ),
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment
-                                      .spaceBetween,
-                                  children: const [
-                                    Text("Tax"),
-                                    Text("\$0.00"),
-                                  ],
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: const [Text("Tax"), Text("\$0.00")],
                                 ),
                                 const Divider(),
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment
-                                      .spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
                                       "Total",
                                       style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 16),
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                      ),
                                     ),
                                     Text(
                                       "KES ${vm.total.toStringAsFixed(2)}",
                                       style: TextStyle(
-                                          color: Colors.green,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 20),
+                                        color: Colors.green,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20,
+                                      ),
                                     ),
                                   ],
                                 ),
                               ],
                             ),
                           );
-                        }
+                        },
                       ),
                     ),
 
@@ -302,7 +313,9 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                 color: Theme.of(context).scaffoldBackgroundColor,
                 border: Border(
                   top: BorderSide(
-                      color: Theme.of(context).dividerColor, width: 1),
+                    color: Theme.of(context).dividerColor,
+                    width: 1,
+                  ),
                 ),
               ),
               child: Row(
@@ -314,13 +327,13 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                       label: const Text("Invoice"),
                       style: ElevatedButton.styleFrom(
                         backgroundColor:
-                        Theme.of(context).brightness == Brightness.light
-                            ? Colors.grey[300]
-                            : Colors.grey[800],
+                            Theme.of(context).brightness == Brightness.light
+                                ? Colors.grey[300]
+                                : Colors.grey[800],
                         foregroundColor:
-                        Theme.of(context).brightness == Brightness.light
-                            ? Colors.black
-                            : Colors.white,
+                            Theme.of(context).brightness == Brightness.light
+                                ? Colors.black
+                                : Colors.white,
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16),
@@ -348,27 +361,32 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                 ],
               ),
             ),
-          )
+          ),
         ],
       ),
     );
   }
-  Widget _orderItems({
-    required Cart item,
 
-  }) {
+  Widget _orderItems({required Cart item}) {
     return Container(
       padding: const EdgeInsets.all(16),
       child: Row(
         children: [
-          Container(
-            height: 64,
-            width: 64,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              color: Colors.grey.shade200, // placeholder image
+          ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: SizedBox(
+              height: 64,
+              width: 64,
+              child: FittedBox(
+                fit: BoxFit.cover,
+                child: Image.network(
+                  "https://lh3.googleusercontent.com/aida-public/AB6AXuC0b_5JRYT6GYbjNZe6j0nA_UOuoSzRkEwXvmvoIVfl7mbO40h9sesK-0A-Exf0aJ5bhobM7m5HeSieEf5BNw0q0qbutcLlSHrs9WMnn8Sl7jckewr_fgd-bapYAYEbP-X6nszkqtF_JWIfcBw9vMlBvXo3lvcmhBIsKMQXTm-VihkFIzzCKD6QVeJNtJTwch2vWTupmK2EpSA0GTSMniZRIbuj1ZccqhElAyC8O2sJsBLZszLeUkc3PhF1OGUpZ4-Jh_fa8A9_08Q",
+                  errorBuilder:
+                      (context, error, stackTrace) =>
+                          Container(color: Colors.grey.shade200),
+                ),
+              ),
             ),
-            child: const Icon(Icons.shopping_bag),
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -384,10 +402,7 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                 ),
                 Text(
                   item.unitTypeName,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: Colors.green,
-                  ),
+                  style: const TextStyle(fontSize: 12, color: Colors.green),
                 ),
                 const SizedBox(height: 4),
                 Text(
@@ -397,10 +412,17 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
               ],
             ),
           ),
+          const SizedBox(height: 4),
 
+          Text(
+            "\$${(item.price * item.quantity).toStringAsFixed(2)}",
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.black87,
+            ),
+          ),
         ],
       ),
     );
   }
 }
-

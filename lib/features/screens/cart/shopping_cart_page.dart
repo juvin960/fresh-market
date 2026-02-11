@@ -13,7 +13,15 @@ class CartCheckoutPage extends StatefulWidget {
 }
 
 class _CartCheckoutPageState extends State<CartCheckoutPage> {
+  final TextEditingController _addressController = TextEditingController();
   String? region;
+
+
+  @override
+  void dispose() {
+    _addressController.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -60,8 +68,8 @@ class _CartCheckoutPageState extends State<CartCheckoutPage> {
                           children: vm.cartItems.map((item) {
                             return _cartItem(
                               item: item,
-                              onAdd: () => vm.incrementQuantity(item.id),
-                              onRemove: () => vm.decrementQuantity(item.id),
+                              // onAdd: () => vm.incrementQuantity(item.id),
+                              // onRemove: () => vm.decrementQuantity(item.id),
                             );
                           }).toList(),
                         );
@@ -125,28 +133,37 @@ class _CartCheckoutPageState extends State<CartCheckoutPage> {
     );
   }
 
+
   Widget _cartItem({
     required Cart item,
-    required VoidCallback onAdd,
-    required VoidCallback onRemove,
+    // required VoidCallback onAdd,
+    // required VoidCallback onRemove,
   }) {
     return Container(
       padding: const EdgeInsets.all(16),
       child: Row(
         children: [
-          Container(
-            height: 64,
-            width: 64,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              color: Colors.grey.shade200, // placeholder image
+          ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: SizedBox(
+              height: 64,
+              width: 64,
+              child: FittedBox(
+                fit: BoxFit.cover,
+                child: Image.network("https://lh3.googleusercontent.com/aida-public/AB6AXuC0b_5JRYT6GYbjNZe6j0nA_UOuoSzRkEwXvmvoIVfl7mbO40h9sesK-0A-Exf0aJ5bhobM7m5HeSieEf5BNw0q0qbutcLlSHrs9WMnn8Sl7jckewr_fgd-bapYAYEbP-X6nszkqtF_JWIfcBw9vMlBvXo3lvcmhBIsKMQXTm-VihkFIzzCKD6QVeJNtJTwch2vWTupmK2EpSA0GTSMniZRIbuj1ZccqhElAyC8O2sJsBLZszLeUkc3PhF1OGUpZ4-Jh_fa8A9_08Q",
+                  errorBuilder: (context, error, stackTrace) => Container(
+                    color: Colors.grey.shade200,
+                  ),
+                ),
+              ),
             ),
-            child: const Icon(Icons.shopping_bag),
           ),
+
           const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+
               children: [
                 Text(
                   item.name,
@@ -170,9 +187,10 @@ class _CartCheckoutPageState extends State<CartCheckoutPage> {
               ],
             ),
           ),
+
           Row(
             children: [
-              _qtyButton(Icons.remove, onRemove),
+              // _qtyButton(Icons.remove, onRemove),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
                 child: Text(
@@ -183,7 +201,7 @@ class _CartCheckoutPageState extends State<CartCheckoutPage> {
                   ),
                 ),
               ),
-              _qtyButton(Icons.add, onAdd, filled: true),
+              // _qtyButton(Icons.add, onAdd, filled: true),
             ],
           ),
         ],
@@ -204,9 +222,6 @@ class _CartCheckoutPageState extends State<CartCheckoutPage> {
       ),
     );
   }
-
-
-
   Widget _sectionTitle(String title) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 24, 16, 8),
@@ -228,13 +243,15 @@ class _CartCheckoutPageState extends State<CartCheckoutPage> {
 
               return DropdownButtonFormField<Region>(
                 value: vm.selectedRegion,
-                items: vm.regions.map((r) {
+                items: vm.regions.map((region) {
                   return DropdownMenuItem<Region>(
-                    value: r,
-                    child: Text(r.name),
+                    value: region,
+                    child: Text(region.name),
                   );
                 }).toList(),
-                onChanged: vm.setSelectedRegion,
+                onChanged: (region) {
+                  vm.setSelectedRegion(region);
+                },
                 decoration: InputDecoration(
                   labelText: "Delivery Region",
                   border: OutlineInputBorder(
@@ -249,6 +266,7 @@ class _CartCheckoutPageState extends State<CartCheckoutPage> {
           const SizedBox(height: 12),
           TextField(
             maxLines: 2,
+            controller: _addressController,
             decoration: InputDecoration(
               labelText: "Full Address",
               hintText: "Street, Building, Apartment No.",
@@ -354,10 +372,15 @@ class _CartCheckoutPageState extends State<CartCheckoutPage> {
         height: 56,
         child: ElevatedButton(
           onPressed: () {
+            final vm = Provider.of<CartViewModel>(context,  listen: false);
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => const OrderDetailsPage(),
+                builder: (context) => OrderDetailsPage(
+                  region: vm.selectedRegion,
+                  address: _addressController.text.trim(),
+
+                ),
               ),
             );
           },

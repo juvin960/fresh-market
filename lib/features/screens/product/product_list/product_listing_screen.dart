@@ -345,6 +345,8 @@ class ProductCard extends StatefulWidget {
 }
 
 class _ProductCardState extends State<ProductCard> {
+  bool isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -423,39 +425,49 @@ class _ProductCardState extends State<ProductCard> {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10)),
                     ),
-                    onPressed: () async {
+                    onPressed: isLoading
+                        ? null
+                        : () async {
+                      setState(() => isLoading = true);
+
                       final vm = context.read<CartViewModel>();
 
                       bool isSuccess = await vm.addSelectedToCart(
                         productId: widget.product.id,
                         selectedUnitTypeId: widget.product.unitId,
                         quantity: 2.0,
-
                       );
-                      if (! mounted) return;
-                      if(isSuccess) {
+
+                      if (!mounted) return;
+
+                      setState(() => isLoading = false);
+
+                      if (isSuccess) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(content: Text('Added to cart!')),
                         );
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const CartCheckoutPage(),
-                          ),
-                        );
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text(vm.errorMessage ?? 'Failed to add to cart')),
+                          SnackBar(
+                              content:
+                              Text(vm.errorMessage ?? 'Failed to add to cart')),
                         );
-                        return;
                       }
-
-
-
                     },
-                    icon: const Icon(Icons.add_shopping_cart, size: 16),
-                    label: const Text("Add",
-                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    icon: isLoading
+                        ? const SizedBox(
+                      width: 16,
+                      height: 16,
+                      child: CircularProgressIndicator(
+                        color: Colors.white,
+                        strokeWidth: 2,
+                      ),
+                    )
+                        : const Icon(Icons.add_shopping_cart, size: 16),
+                    label: Text(
+                      isLoading ? 'Adding...' : 'Add',
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
                   )
                 ],
               ),

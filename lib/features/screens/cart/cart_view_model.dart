@@ -12,6 +12,7 @@ class CartViewModel extends ChangeNotifier {
   bool _isLoading = false;
   String? _errorMessage;
   Region? selectedRegion;
+  late int _selectedRegionId;
   Cart? selectedItem;
   double _total = 0.0;
 
@@ -20,7 +21,7 @@ class CartViewModel extends ChangeNotifier {
   String? get errorMessage => _errorMessage;
   List<Region> get regions => _regions;
   double get total => _total;
-
+  get selectedRegionId => _selectedRegionId;
 
 
   Future<bool> addSelectedToCart( {
@@ -107,10 +108,21 @@ class CartViewModel extends ChangeNotifier {
       notifyListeners();
     }
   }
-  void setSelectedRegion(Region? region) {
+   setSelectedRegion(Region? region ) {
     selectedRegion = region;
+    _selectedRegionId = region!.id;
     notifyListeners();
   }
+
+
+
+
+
+
+
+
+
+
 
   void incrementQuantity(int cartId) {
     final index = _cartItems.indexWhere((e) => e.id == cartId);

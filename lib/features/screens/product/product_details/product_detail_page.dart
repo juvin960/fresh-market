@@ -359,6 +359,12 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Added to cart!')),
                     );
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const CartCheckoutPage(),
+                      ),
+                    );
 
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
@@ -366,10 +372,6 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                     );
                     return;
                   }
-
-
-
-
                 },
                 icon: const Icon(Icons.shopping_basket),
                 label: const Text(

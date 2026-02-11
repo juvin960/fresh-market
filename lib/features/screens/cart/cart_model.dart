@@ -13,12 +13,13 @@ class Cart {
   final double quantity;
   final int unitTypeId;
   final String unitTypeName;
+  final String? imageUrl;
 
 
 
 
 
-  Cart(  {
+  Cart(   {
     required this.id,
     required this.productId,
     required this.name,
@@ -26,10 +27,11 @@ class Cart {
     required this.quantity,
     required this.unitTypeId,
     required this.unitTypeName,
+    this.imageUrl,
 
   });
 
-  // double get totalPrice => price * quantity;
+   double get totalPrice => price * quantity;
 
 
   factory Cart.fromJson(Map<String, dynamic> json) {
@@ -41,6 +43,7 @@ class Cart {
       quantity: double.parse(json['selected_quantity'].toString()),
       unitTypeId: json['selected_unit_type_id'],
       unitTypeName: json['unit_type']['name'],
+      imageUrl: json['image_url'],
     );
   }
 }
@@ -107,6 +110,7 @@ class CartModel {
           quantity: double.parse(item['selected_quantity'].toString()),
           unitTypeId: item['selected_unit_type_id'],
           unitTypeName: item['unit_type']['name'],
+          imageUrl: item['product']['image'],
         );
 
         cartItems.add(cart);
@@ -141,6 +145,7 @@ class CartModel {
     return rawList.map((e) {
       return Region(
         name: e['name'] ?? '',
+        id: e['id'] ?? '',
       );
     }).toList();
   }
@@ -150,16 +155,17 @@ class CartModel {
 
 class Region {
   final String name;
+  final int id;
 
 
   Region({
     required this.name,
+    required this.id
   });
   factory Region.fromJson(Map<String, dynamic> json) {
     return Region(
-
       name: json['name'] ?? '',
-
+      id: json['id'] ?? '',
     );
   }
 

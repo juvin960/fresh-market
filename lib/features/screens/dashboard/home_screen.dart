@@ -325,6 +325,7 @@ class _FreshMarketHomeState extends State<FreshMarketHome> {
                   "Strawberries",
                   "\$3.20",
                   "https://lh3.googleusercontent.com/aida-public/AB6AXuC0b_5JRYT6GYbjNZe6j0nA_UOuoSzRkEwXvmvoIVfl7mbO40h9sesK-0A-Exf0aJ5bhobM7m5HeSieEf5BNw0q0qbutcLlSHrs9WMnn8Sl7jckewr_fgd-bapYAYEbP-X6nszkqtF_JWIfcBw9vMlBvXo3lvcmhBIsKMQXTm-VihkFIzzCKD6QVeJNtJTwch2vWTupmK2EpSA0GTSMniZRIbuj1ZccqhElAyC8O2sJsBLZszLeUkc3PhF1OGUpZ4-Jh_fa8A9_08Q"),
+
             ],
           )
         ],
